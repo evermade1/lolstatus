@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
+import Profile from './Profile'
+import styles from './styles'
 
 const API_KEY = "RGAPI-cb9b33c2-0d6b-404b-af8a-0f07e6231310"
 
@@ -49,11 +51,7 @@ export default function App() {
         placeholder='소환사명을 입력하세요.' />
       {summonerData !== null ? 
       (rankData !== null ? (rankData !== undefined ? 
-      <View style={styles.profile}>
-        <Text>{rankData.summonerName} Lv.{summonerData.summonerLevel}</Text>
-        <Text>{rankData.tier} {rankData.rank} {rankData.leaguePoints}LP</Text>
-        <Text>{rankData.wins}승 {rankData.losses}패 승률 {(rankData.wins/(rankData.wins+rankData.losses)*100).toFixed(2)}%</Text>
-      </View> 
+      <Profile rankData={rankData} summonerData={summonerData}/>
       : 
       <View style={styles.profile}>
       <Text>{summonerName} Lv.{summonerData.summonerLevel}</Text>
@@ -65,23 +63,4 @@ export default function App() {
       <StatusBar style="auto" />
     </View>
   )
-    }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    marginTop: 50
-    // justifyContent: 'center',
-  },
-  button: {
-    backgroundColor: "lightgray",
-    padding: 20,
-    borderRadius: 10
-  },
-  profile: {
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
+      }
