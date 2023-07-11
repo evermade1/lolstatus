@@ -8,7 +8,7 @@ const Profile = ({ rankData, summonerData }) => {
             <View style={styles.profile1}>
                 <Image
                     source={{ uri: `https://z.fow.kr/profile/${summonerData.profileIconId}.png` }}
-                    style={{ width: 100, height: 100, marginRight:30, borderWidth:5, borderRadius: 15, borderColor: "teal" }} />
+                    style={{ width: 100, height: 100, marginRight:30, borderRadius: 15 }} />
                 <View>
                     <Text style={styles.nickname}>{rankData.summonerName}</Text>
                     <Text style={styles.nickname}>Lv.{summonerData.summonerLevel}</Text>
