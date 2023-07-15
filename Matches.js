@@ -4,6 +4,9 @@ import { useState } from 'react';
 
 const Matches = ({ gameData, rankData }) => {
     //const gameDataKeys = Object.keys(gameData);
+    gameData.sort(function(a, b) {
+        return b.gameCreation - a.gameCreation;
+      });
     const nickname = rankData.summonerName
     return (
         <View style={{ marginTop: 20, paddingHorizontal: 30 }}>

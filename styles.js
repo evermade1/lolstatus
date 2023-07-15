@@ -3,12 +3,14 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fefefe',
+      //backgroundColor: '#424242',
+      backgroundColor: "#fff",
       alignItems: 'center',
-      marginTop: 40
+      //marginTop: 40
       // justifyContent: 'center',
     },
     logo: {
+      marginTop: 40,
       padding: 20
     },
     logofont: {
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
       fontWeight: 600
     },
     level: {
-      marginBottom: 5,
+      marginBottom: 6,
       fontSize: 20
     },
     famous: {
@@ -64,6 +66,7 @@ const styles = StyleSheet.create({
     },
     match: {
       flexDirection: "row",
+      borderRadius: 10,
       padding: 10,
       marginTop: 3
     },
