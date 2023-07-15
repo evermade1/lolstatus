@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import Profile from './Profile'
 import Matches from './Matches';
 import styles from './styles'
 
-export const API_KEY = "RGAPI-227acb2f-41f1-48d1-a0f9-236fa7911cae"
+export const API_KEY = "RGAPI-c933c2be-f9f1-42c8-80c7-9d0d25db3432"
 
 export default function App() {
   const [ok, setOk] = useState("")
@@ -43,35 +43,46 @@ export default function App() {
     }
     }
   const sendSummonerName = async () => {
-    
+    Keyboard.dismiss()
     setSummonerName(text)
     await abc(text)
+    setText("")
   }
   const onChangeText = (name) => {
     setText(name)
   }
   return (
     <View style={styles.container}>
-      <TextInput style={styles.button}
-        onSubmitEditing={sendSummonerName}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder='소환사명을 입력하세요.' />
+      <View style={styles.logo}>
+        <Text style={styles.logofont}>MOO.GG</Text>
+      </View>
+      <View style={styles.topBar}>
+        <TextInput style={styles.button}
+          onSubmitEditing={sendSummonerName}
+          onChangeText={onChangeText}
+          value={text}
+          placeholder='소환사명을 입력하세요.' />
+        <TouchableOpacity style={styles.searchButton}
+        onPress={sendSummonerName}>
+          <Text>검색</Text>
+        </TouchableOpacity>
+      </View>
       {summonerData !== null ? 
       (rankData !== null ? (rankData !== undefined ? (
-        <View>
-      <Profile rankData={rankData} summonerData={summonerData}/>
-      <Matches gameData={gameData} rankData={rankData}/>
-      </View>)
+          <ScrollView style={styles.datas}>
+            <Profile rankData={rankData} summonerData={summonerData} />
+            <Matches gameData={gameData} rankData={rankData} />
+          </ScrollView>)
       : 
       <View style={styles.profile}>
       <Text>{summonerName} Lv.{summonerData.summonerLevel}</Text>
-      <Text>최근 랭크 데이터가 없습니다.</Text>
+      <Text style={styles.errorPage}>최근 랭크 데이터가 없습니다.</Text>
       </View>) //rankData == undefined
       : null) // rankData == null
-       : (ok !== "" ? <Text>등록된 소환사가 없습니다.</Text> : null)} 
+       : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : null)} 
       
       <StatusBar style="auto" />
+      
     </View>
   )
       }
