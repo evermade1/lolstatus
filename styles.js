@@ -1,10 +1,20 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const SCREEN_WIDTH = Dimensions.get("window").width
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       //backgroundColor: '#424242',
       backgroundColor: "#fff",
+      alignItems: 'center',
+      //marginTop: 40
+      // justifyContent: 'center',
+    },
+    container2: {
+      flex: 1,
+      //backgroundColor: '#424242',
+      backgroundColor: "#000",
       alignItems: 'center',
       //marginTop: 40
       // justifyContent: 'center',
@@ -42,12 +52,20 @@ const styles = StyleSheet.create({
       paddingTop: 35,
       paddingBottom: 100
     },
+    imagebackground: {
+      width: "100%"
+    },
     profile1: {
       flexDirection: "row",
       justifyContent: 'flex-start',
       paddingHorizontal: 30
     },
+    tiers: {
+      flexDirection: "row",
+      justifyContent: "space-around"
+    },
     profile2: {
+      width: SCREEN_WIDTH,
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center"
