@@ -32,7 +32,7 @@ export default function App() {
     else{
       const response1 = await fetch(`https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${json.id}?api_key=${API_KEY}`)
       const json1 = await response1.json()
-      const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=20&api_key=${API_KEY}`)
+      const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=100&api_key=${API_KEY}`)
       const json2 = await response2.json()
       json2.map(async (m) => {
         const response3 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/${m}?api_key=${API_KEY}`);
@@ -77,7 +77,7 @@ export default function App() {
           <ScrollView style={styles.datas}>
             <Profile summonerData={summonerData} />
             <Rank rankData={rankData} flexData={flexData} />
-            <Matches gameData={gameData} name={summonerName} />
+            <Matches gameData={gameData} id={summonerData.id} />
           </ScrollView>) 
        // rankData == null
        : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : null)} 

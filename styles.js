@@ -52,6 +52,14 @@ const styles = StyleSheet.create({
       paddingTop: 35,
       paddingBottom: 100
     },
+    buttons: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    buttonsFont: {
+      fontSize: 15,
+      fontWeight: 600
+    },
     imagebackground: {
       width: "100%"
     },
@@ -88,10 +96,11 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       padding: 10,
       height: 70,
-      marginTop: 3,
+      marginTop: 5,
     },
     blueBg: {backgroundColor: "#CEECF5"},
     redBg: {backgroundColor: "#F6CECE"},
+    grayBg: {backgroundColor: "#F2F2F2"},
     errorPage: {
       marginTop: 200,
       fontSize: 20
