@@ -73,21 +73,13 @@ export default function App() {
           <Text>검색</Text>
         </TouchableOpacity>
       </View>
-      {summonerData !== null ? 
-      (rankData !== null || flexData !== null ? (rankData !== undefined || flexData !== undefined ? (
+      {summonerData !== null && !summonerData.hasOwnProperty("status") ? (
           <ScrollView style={styles.datas}>
             <Profile summonerData={summonerData} />
             <Rank rankData={rankData} flexData={flexData} />
             <Matches gameData={gameData} name={summonerName} />
-          </ScrollView>)
-      : 
-          <ScrollView style={styles.datas}>
-            <Profile summonerData={summonerData} />
-            <Text style={styles.errorPage}>랭크 데이터가 없습니다.</Text>
-            <Matches gameData={gameData} name={summonerName} />
-          </ScrollView>
-      ) //rankData == undefined
-      : null) // rankData == null
+          </ScrollView>) 
+       // rankData == null
        : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : null)} 
       
       <StatusBar style="auto" />

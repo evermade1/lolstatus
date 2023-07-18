@@ -84,9 +84,11 @@ const styles = StyleSheet.create({
     },
     match: {
       flexDirection: "row",
+      justifyContent: "space-between",
       borderRadius: 10,
       padding: 10,
-      marginTop: 3
+      height: 70,
+      marginTop: 3,
     },
     blueBg: {backgroundColor: "#CEECF5"},
     redBg: {backgroundColor: "#F6CECE"},
