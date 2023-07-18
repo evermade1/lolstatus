@@ -2,10 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import Profile from './Profile'
+import Rank from './Rank'
 import Matches from './Matches';
 import styles from './styles'
 
-export const API_KEY = "RGAPI-bcd4ed82-a2ae-453b-b210-6b4ae8ca4069"
+export const API_KEY = "RGAPI-e293c11b-aef2-47cf-a753-a256f04d4a56"
 
 export default function App() {
   const [ok, setOk] = useState("")
@@ -73,16 +74,19 @@ export default function App() {
         </TouchableOpacity>
       </View>
       {summonerData !== null ? 
-      (rankData !== null ? (rankData !== undefined ? (
+      (rankData !== null || flexData !== null ? (rankData !== undefined || flexData !== undefined ? (
           <ScrollView style={styles.datas}>
-            <Profile rankData={rankData} flexData={flexData} summonerData={summonerData} />
-            <Matches gameData={gameData} rankData={rankData} />
+            <Profile summonerData={summonerData} />
+            <Rank rankData={rankData} flexData={flexData} />
+            <Matches gameData={gameData} name={summonerName} />
           </ScrollView>)
       : 
-      <View style={styles.profile}>
-      <Text>{summonerName} Lv.{summonerData.summonerLevel}</Text>
-      <Text style={styles.errorPage}>최근 랭크 데이터가 없습니다.</Text>
-      </View>) //rankData == undefined
+          <ScrollView style={styles.datas}>
+            <Profile summonerData={summonerData} />
+            <Text style={styles.errorPage}>랭크 데이터가 없습니다.</Text>
+            <Matches gameData={gameData} name={summonerName} />
+          </ScrollView>
+      ) //rankData == undefined
       : null) // rankData == null
        : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : null)} 
       

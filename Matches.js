@@ -2,16 +2,15 @@ import { StyleSheet, Text, View, TextInput, Image, ScrollView } from 'react-nati
 import styles from './styles'
 import { useState } from 'react';
 
-const Matches = ({ gameData, rankData }) => {
+const Matches = ({ gameData, name }) => {
     //const gameDataKeys = Object.keys(gameData);
     gameData.sort(function(a, b) {
         return b.gameCreation - a.gameCreation;
       });
-    const nickname = rankData.summonerName
     return (
         <View style={{ marginTop: 20, paddingHorizontal: 30 }}>
             {gameData.map((gameData, index) => {
-                const myData = gameData.participants.filter((value) => value.summonerName == nickname)[0]
+                const myData = gameData.participants.filter((value) => value.summonerName.toLowerCase().replace(/ /g,"") == name.toLowerCase().replace(/ /g,""))[0]
                 const bgColor = myData.win ? styles.blueBg : styles.redBg;
                 return (
                     <View key={index} style={[styles.match, bgColor]}>
