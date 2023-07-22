@@ -52,13 +52,22 @@ const styles = StyleSheet.create({
       paddingTop: 35,
       paddingBottom: 100
     },
-    buttons: {
+    typeButtons: {
       flexDirection: "row",
       justifyContent: "space-around",
+      margin: 10
+    },
+    typeButton: {
+      backgroundColor: "lightgray",
+      width: "30%",
+      //height: "10%",
+      borderRadius: 10,
+      alignItems: "center",
+      justifyContent: "center"
     },
     buttonsFont: {
-      fontSize: 15,
-      fontWeight: 600
+      margin: 3,
+      fontSize: 15
     },
     imagebackground: {
       width: "100%"
@@ -97,6 +106,21 @@ const styles = StyleSheet.create({
       padding: 10,
       height: 70,
       marginTop: 5,
+    },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+      backgroundColor: '#fff',
+      padding: 20,
+      borderRadius: 8,
+      width: '90%', // 모달의 너비를 70%로 설정
+    },
+    matchTeam: {
+      
     },
     blueBg: {backgroundColor: "#CEECF5"},
     redBg: {backgroundColor: "#F6CECE"},

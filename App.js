@@ -6,7 +6,7 @@ import Rank from './Rank'
 import Matches from './Matches';
 import styles from './styles'
 
-export const API_KEY = "RGAPI-e293c11b-aef2-47cf-a753-a256f04d4a56"
+export const API_KEY = "RGAPI-28ad255c-defd-49c8-aabf-ca8c22daa223"
 
 export default function App() {
   const [ok, setOk] = useState("")
@@ -32,7 +32,7 @@ export default function App() {
     else{
       const response1 = await fetch(`https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${json.id}?api_key=${API_KEY}`)
       const json1 = await response1.json()
-      const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=100&api_key=${API_KEY}`)
+      const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=30&api_key=${API_KEY}`)
       const json2 = await response2.json()
       json2.map(async (m) => {
         const response3 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/${m}?api_key=${API_KEY}`);
