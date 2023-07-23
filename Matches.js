@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import styles from './styles'
 import { useState } from 'react';
 
@@ -78,72 +78,138 @@ const Matches = ({ gameData, id }) => {
                             transparent={true}   // 모달이 투명하게 보일지 여부 (true면 배경 투명)
                             visible={modalVisible} // 모달의 가시성 상태
                         >
-                            <TouchableWithoutFeedback onPress={closeModal}>
-                                <View style={styles.modalContainer}>
-                                    <View style={styles.modalContent}>
+                            <View style={styles.modalContainer}>
+                                <View style={styles.modalContent}>
+                                    <ScrollView horizontal pagingEnabled>
                                         <View>
                                             {selectedModalData && selectedModalData.participants.map((data, index) => (
-                                                <View key={index} style={{marginVertical: 2}}>
+                                                <View key={index} style={{flexDirection: "row"}}>
+
+                                                <View style={{ marginVertical: 5, width: Dimensions.get('window').width * 0.9 - 10, marginHorizontal: 5}}>
                                                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                                         <View style={{ flexDirection: "row" }}>
-                                                        <Image
-                                                            source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
-                                                            style={{ width: 35, height: 35 }}
-                                                        />
-                                                        <View style={{ marginLeft: 3 }}>
                                                             <Image
-                                                                source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
-                                                                style={{ width: 17.5, height: 17.5 }}
+                                                                source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
+                                                                style={{ width: 35, height: 35 }}
                                                             />
-                                                            <Image
-                                                                source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
-                                                                style={{ width: 17.5, height: 17.5 }}
-                                                            />
-
-                                                        </View>
-                                                        {/* <View style={{ marginLeft: 3 }}>
-                                                            <Image
-                                                                source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
-                                                                style={{ width: 17.5, height: 17.5 }}
-                                                            />
-                                                            <Image
-                                                                source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
-                                                                style={{ width: 17.5, height: 17.5 }}
-                                                            />
-
-                                                        </View> */}
-                                                        <View style={{flexDirection: "column"}}>
-                                                        <Text style={{ fontSize: 12 }}> {data.summonerName}</Text>
-                                                        <Text style={{ fontSize: 12 }}> {data.kills} / {data.deaths} / {data.assists}  CS {data.totalMinionsKilled}  KDA {((data.kills+data.assists)/data.deaths).toFixed(2)} </Text>
-                                                        </View>
-                                                        </View>
-                                                        <View style={{ flexDirection: 'column' }}>
-                                                            <View style={{flexDirection: "row"}}>
-                                                            {[0, 1, 2, 6].map((itemIndex) => (
+                                                            <View style={{ marginLeft: 3 }}>
                                                                 <Image
-                                                                    key={itemIndex}
-                                                                    source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                    source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
                                                                     style={{ width: 17.5, height: 17.5 }}
                                                                 />
-                                                            ))}
-                                                            </View>
-                                                            <View style={{flexDirection: "row"}}>
-                                                            {[3, 4, 5].map((itemIndex) => (
                                                                 <Image
-                                                                    key={itemIndex}
-                                                                    source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                    source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
                                                                     style={{ width: 17.5, height: 17.5 }}
-                                                                />))}
+                                                                />
+
+                                                            </View>
+                                                            <View style={{ marginLeft: 3 }}>
+                                                                <Image
+                                                                    source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[0].selections[0].perk}.png?v=3` }}
+                                                                    style={{ width: 15, height: 15, marginVertical: 1.25 }}
+                                                                />
+                                                                <Image
+                                                                    source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[1].style}.png?v=3` }}
+                                                                    style={{ width: 15, height: 15, marginVertical: 1.25 }}
+                                                                />
+
+                                                            </View>
+                                                            <View style={{ flexDirection: "column" }}>
+                                                                <Text style={{ fontSize: 12 }}> {data.summonerName}</Text>
+                                                                <Text style={{ fontSize: 12 }}> {data.kills} / {data.deaths} / {data.assists}  CS {data.totalMinionsKilled}  KDA {((data.kills + data.assists) / data.deaths).toFixed(2)} </Text>
+                                                            </View>
+                                                        </View>
+                                                        <View style={{ flexDirection: 'column' }}>
+                                                            <View style={{ flexDirection: "row" }}>
+                                                                {[0, 1, 2, 6].map((itemIndex) => (
+                                                                    <Image
+                                                                        key={itemIndex}
+                                                                        source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                        style={{ width: 17.5, height: 17.5 }}
+                                                                    />
+                                                                ))}
+                                                            </View>
+                                                            <View style={{ flexDirection: "row" }}>
+                                                                {[3, 4, 5].map((itemIndex) => (
+                                                                    <Image
+                                                                        key={itemIndex}
+                                                                        source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                        style={{ width: 17.5, height: 17.5 }}
+                                                                    />))}
                                                             </View>
                                                         </View>
 
                                                     </View>
                                                 </View>
+                                                <View style={{ marginVertical: 5, width: Dimensions.get('window').width * 0.9 - 10, marginHorizontal: 5}}>
+                                                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                                        <View style={{ flexDirection: "row" }}>
+                                                            <Image
+                                                                source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
+                                                                style={{ width: 35, height: 35 }}
+                                                            />
+                                                            <View style={{ marginLeft: 3 }}>
+                                                                <Image
+                                                                    source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
+                                                                    style={{ width: 17.5, height: 17.5 }}
+                                                                />
+                                                                <Image
+                                                                    source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
+                                                                    style={{ width: 17.5, height: 17.5 }}
+                                                                />
+
+                                                            </View>
+                                                            <View style={{ marginLeft: 3 }}>
+                                                                <Image
+                                                                    source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[0].selections[0].perk}.png?v=3` }}
+                                                                    style={{ width: 15, height: 15, marginVertical: 1.25 }}
+                                                                />
+                                                                <Image
+                                                                    source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[1].style}.png?v=3` }}
+                                                                    style={{ width: 15, height: 15, marginVertical: 1.25 }}
+                                                                />
+
+                                                            </View>
+                                                            <View style={{ flexDirection: "column" }}>
+                                                                <Text style={{ fontSize: 12 }}> {data.summonerName}</Text>
+                                                                <Text style={{ fontSize: 12 }}> {data.kills} / {data.deaths} / {data.assists}  CS {data.totalMinionsKilled}  KDA {((data.kills + data.assists) / data.deaths).toFixed(2)} </Text>
+                                                            </View>
+                                                        </View>
+                                                        <View style={{ flexDirection: 'column' }}>
+                                                            <View style={{ flexDirection: "row" }}>
+                                                                {[0, 1, 2, 6].map((itemIndex) => (
+                                                                    <Image
+                                                                        key={itemIndex}
+                                                                        source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                        style={{ width: 17.5, height: 17.5 }}
+                                                                    />
+                                                                ))}
+                                                            </View>
+                                                            <View style={{ flexDirection: "row" }}>
+                                                                {[3, 4, 5].map((itemIndex) => (
+                                                                    <Image
+                                                                        key={itemIndex}
+                                                                        source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                        style={{ width: 17.5, height: 17.5 }}
+                                                                    />))}
+                                                            </View>
+                                                        </View>
+
+                                                    </View>
+                                                </View>
+                                                </View>
+
+
+
                                             ))}
+
                                         </View>
-                                    </View>
+                                        
+
+
+                                    </ScrollView>
                                 </View>
-                            </TouchableWithoutFeedback>
+                            </View>
                         </Modal>
                     </View>
                 )

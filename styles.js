@@ -115,12 +115,14 @@ const styles = StyleSheet.create({
     },
     modalContent: {
       backgroundColor: '#fff',
-      padding: 20,
       borderRadius: 8,
-      width: '90%', // 모달의 너비를 70%로 설정
+      padding: "5%",
+       // 모달의 너비를 70%로 설정
+      width: "100%"
+      //width: SCREEN_WIDTH
     },
     matchTeam: {
-      
+      width: "100%"
     },
     blueBg: {backgroundColor: "#CEECF5"},
     redBg: {backgroundColor: "#F6CECE"},
@@ -129,6 +131,9 @@ const styles = StyleSheet.create({
       marginTop: 200,
       fontSize: 20
     },
+    modalPage1: {
+      //width: SCREEN_WIDTH
+    }
   });
 
 export default styles;
