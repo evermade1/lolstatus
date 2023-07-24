@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import ProgressBar from './Progress';
 import styles from './styles'
 import { useState } from 'react';
 
@@ -78,83 +79,226 @@ const Matches = ({ gameData, id }) => {
                             transparent={true}   // 모달이 투명하게 보일지 여부 (true면 배경 투명)
                             visible={modalVisible} // 모달의 가시성 상태
                         >
-                            
+
                             <View style={styles.modalContainer}>
                                 <View style={styles.modalContent}>
-                                    
-                                        <ScrollView horizontal pagingEnabled>
-                                            <View>
-                                            {selectedModalData && selectedModalData.participants.map((data, index) => 
-                                            
+
+                                    <ScrollView horizontal pagingEnabled>
+                                    <View>
+                                    <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>Overall</Text></View>
+                                            {selectedModalData && selectedModalData.participants.map((data, index) =>
                                                 (
-                                                <View key={index} style={{ flexDirection: "row" }}>
-                                                <View style={{ marginVertical: 5, width: Dimensions.get('window').width * 0.8 - 10, marginHorizontal: 5}}>
-                                                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                                        <View style={{ flexDirection: "row" }}>
-                                                            <Image
-                                                                source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
-                                                                style={{ width: 40, height: 40 }}
-                                                            />
-                                                            <View style={{ marginLeft: 3 }}>
-                                                                <Image
-                                                                    source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
-                                                                    style={{ width: 20, height: 20 }}
-                                                                />
-                                                                <Image
-                                                                    source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
-                                                                    style={{ width: 20, height: 20 }}
-                                                                />
-
-                                                            </View>
-                                                            <View style={{ marginLeft: 3 }}>
-                                                                <Image
-                                                                    source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[0].selections[0].perk}.png?v=3` }}
-                                                                    style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
-                                                                />
-                                                                <Image
-                                                                    source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[1].style}.png?v=3` }}
-                                                                    style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
-                                                                />
-
-                                                            </View>
-                                                            <View style={{ flexDirection: "column" }}>
-                                                                <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
-                                                                <Text style={{ fontSize: 11 }}> {data.kills} / {data.deaths} / {data.assists}  CS {data.totalMinionsKilled}  KDA {((data.kills + data.assists) / data.deaths).toFixed(2)} </Text>
-                                                                <Text style={{ fontSize: 11 }}> {data.totalDamageDealtToChampions} {data.goldEarned}G</Text>
-                                                            </View>
-                                                        </View>
-                                                        <View style={{ flexDirection: 'column' }}>
-                                                            <View style={{ flexDirection: "row" }}>
-                                                                {[0, 1, 2, 6].map((itemIndex) => (
+                                                    
+                                                    <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
+                                                        <View style={{ margin: 5, width: Dimensions.get('window').width * 0.9 - 30 }}>
+                                                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                                                <View style={{ flexDirection: "row" }}>
                                                                     <Image
-                                                                        key={itemIndex}
-                                                                        source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
-                                                                        style={{ width: 20, height: 20 }}
+                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
+                                                                        style={{ width: 40, height: 40 }}
                                                                     />
-                                                                ))}
-                                                            </View>
-                                                            <View style={{ flexDirection: "row" }}>
-                                                                {[3, 4, 5].map((itemIndex) => (
-                                                                    <Image
-                                                                        key={itemIndex}
-                                                                        source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
-                                                                        style={{ width: 20, height: 20 }}
-                                                                    />))}
+                                                                    <View style={{ marginLeft: 3 }}>
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
+                                                                            style={{ width: 20, height: 20 }}
+                                                                        />
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
+                                                                            style={{ width: 20, height: 20 }}
+                                                                        />
+
+                                                                    </View>
+                                                                    <View style={{ marginLeft: 3 }}>
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[0].selections[0].perk}.png?v=3` }}
+                                                                            style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
+                                                                        />
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[1].style}.png?v=3` }}
+                                                                            style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
+                                                                        />
+
+                                                                    </View>
+                                                                    <View style={{ flexDirection: "column" }}>
+                                                                        <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
+                                                                        <Text style={{ fontSize: 11 }}> {data.kills} / {data.deaths} / {data.assists}  CS {data.totalMinionsKilled}  KDA {((data.kills + data.assists) / data.deaths).toFixed(2)} </Text>
+                                                                        <Text style={{ fontSize: 11 }}> {data.totalDamageDealtToChampions} {data.goldEarned}G</Text>
+                                                                    </View>
+                                                                </View>
+                                                                <View style={{ flexDirection: 'column' }}>
+                                                                    <View style={{ flexDirection: "row" }}>
+                                                                        {[0, 1, 2, 6].map((itemIndex) => (
+                                                                            <Image
+                                                                                key={itemIndex}
+                                                                                source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                                style={{ width: 20, height: 20 }}
+                                                                            />
+                                                                        ))}
+                                                                    </View>
+                                                                    <View style={{ flexDirection: "row" }}>
+                                                                        {[3, 4, 5].map((itemIndex) => (
+                                                                            <Image
+                                                                                key={itemIndex}
+                                                                                source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                                style={{ width: 20, height: 20 }}
+                                                                            />))}
+                                                                    </View>
+                                                                </View>
+
                                                             </View>
                                                         </View>
-
+                                                        
                                                     </View>
-                                                </View>
-                                                </View>
-                                            
-                                            ))}
-                                            </View>
 
-                                        </ScrollView>
+                                                ))}
+
+                                        </View>
+                                        <View>
+                                        <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>딜량</Text></View>
+                                            {selectedModalData && selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                                .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions).map((data, index) =>
+                                                (
+                                                    <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
+                                                        <View style={{ margin: 5, width: Dimensions.get('window').width * 0.9 - 30}}>
+                                                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                                                <View style={{ flexDirection: "row" }}>
+                                                                    <Image
+                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
+                                                                        style={{ width: 40, height: 40 }}
+                                                                    />
+                                                                    <View style={{ marginLeft: 3 }}>
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
+                                                                            style={{ width: 20, height: 20 }}
+                                                                        />
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
+                                                                            style={{ width: 20, height: 20 }}SS
+                                                                        />
+
+                                                                    </View>
+                                                                    <View style={{ marginLeft: 3 }}>
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[0].selections[0].perk}.png?v=3` }}
+                                                                            style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
+                                                                        />
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[1].style}.png?v=3` }}
+                                                                            style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
+                                                                        />
+
+                                                                    </View>
+                                                                    <View style={{ flexDirection: "column", width: "50%" }}>
+                                                                        <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
+                                                                        <ProgressBar max={selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                                .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions)[0].totalDamageDealtToChampions} value={data.totalDamageDealtToChampions} color={"teal"} />
+                                                                    </View>
+                                                                </View>
+                                                                <View style={{ flexDirection: 'column' }}>
+                                                                    <View style={{ flexDirection: "row" }}>
+                                                                        {[0, 1, 2, 6].map((itemIndex) => (
+                                                                            <Image
+                                                                                key={itemIndex}
+                                                                                source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                                style={{ width: 20, height: 20 }}
+                                                                            />
+                                                                        ))}
+                                                                    </View>
+                                                                    <View style={{ flexDirection: "row" }}>
+                                                                        {[3, 4, 5].map((itemIndex) => (
+                                                                            <Image
+                                                                                key={itemIndex}
+                                                                                source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                                style={{ width: 20, height: 20 }}
+                                                                            />))}
+                                                                    </View>
+                                                                </View>
+
+                                                            </View>
+                                                        </View>
+                                                        
+                                                    </View>
+
+                                                ))}
+
+                                        </View>
+                                        <View>
+                                            <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>획득한 골드</Text></View>
                                         
+                                            {selectedModalData && selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                                .sort((a, b) => b.goldEarned - a.goldEarned).map((data, index) =>
+                                                // 여기
+                                                (
+                                                    <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
+                                                        <View style={{ margin: 5, width: Dimensions.get('window').width * 0.9 - 30}}>
+                                                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                                                <View style={{ flexDirection: "row" }}>
+                                                                    <Image
+                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
+                                                                        style={{ width: 40, height: 40 }}
+                                                                    />
+                                                                    <View style={{ marginLeft: 3 }}>
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/spell/${data.summoner1Id}.png` }}
+                                                                            style={{ width: 20, height: 20 }}
+                                                                        />
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/spell/${data.summoner2Id}.png` }}
+                                                                            style={{ width: 20, height: 20 }}
+                                                                        />
+
+                                                                    </View>
+                                                                    <View style={{ marginLeft: 3 }}>
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[0].selections[0].perk}.png?v=3` }}
+                                                                            style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
+                                                                        />
+                                                                        <Image
+                                                                            source={{ uri: `https://z.fow.kr/img/perk/${data.perks.styles[1].style}.png?v=3` }}
+                                                                            style={{ width: 17.5, height: 17.5, marginVertical: 1.25 }}
+                                                                        />
+
+                                                                    </View>
+                                                                    <View style={{ flexDirection: "column", width: "50%" }}>
+                                                                        <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
+                                                                        <ProgressBar max={selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                                .sort((a, b) => b.goldEarned - a.goldEarned)[0].goldEarned} value={data.goldEarned} color={"gold"} />
+                                                                    
+                                                                    </View>
+                                                                </View>
+                                                                <View style={{ flexDirection: 'column' }}>
+                                                                    <View style={{ flexDirection: "row" }}>
+                                                                        {[0, 1, 2, 6].map((itemIndex) => (
+                                                                            <Image
+                                                                                key={itemIndex}
+                                                                                source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                                style={{ width: 20, height: 20 }}
+                                                                            />
+                                                                        ))}
+                                                                    </View>
+                                                                    <View style={{ flexDirection: "row" }}>
+                                                                        {[3, 4, 5].map((itemIndex) => (
+                                                                            <Image
+                                                                                key={itemIndex}
+                                                                                source={{ uri: `https://z.fow.kr/items3/${data[`item${itemIndex}`]}.png` }}
+                                                                                style={{ width: 20, height: 20 }}
+                                                                            />))}
+                                                                    </View>
+                                                                </View>
+
+                                                            </View>
+                                                        </View>
+                                                    </View>
+
+                                                ))}
+
+                                        </View>
+
+                                    </ScrollView>
 
 
-                                    
+
+
                                 </View>
                             </View>
                         </Modal>

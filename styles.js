@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     modalContent: {
       backgroundColor: '#fff',
       borderRadius: 8,
-      padding: "5%",
+      padding: 10,
        // 모달의 너비를 70%로 설정
       width: "100%"
       //width: SCREEN_WIDTH
@@ -134,7 +134,19 @@ const styles = StyleSheet.create({
     },
     modalPage1: {
       //width: SCREEN_WIDTH
-    }
+    },
+    progressContainer: {
+      width: '100%',
+      height: 20,
+      backgroundColor: '#e0e0e0',
+      borderRadius: 10,
+      overflow: 'hidden', // 내용이 컨테이너를 벗어나지 않도록 설정
+    },
+    progress: {
+      height: '100%',
+      borderRadius: 10,
+      backgroundColor: '#3f51b5',
+    },
   });
 
 export default styles;
