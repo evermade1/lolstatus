@@ -3,6 +3,7 @@
     "name": "lolstatus",
     "slug": "lolstatus",
     "version": "1.0.0",
+    "assetBundlePatterns": ["./assets/championImage/*"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    
     "ios": {
       "supportsTablet": true
     },

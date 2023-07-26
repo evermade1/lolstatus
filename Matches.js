@@ -50,12 +50,13 @@ const Matches = ({ gameData, id }) => {
                 //   }
 
                 const bgColor = myData.teamEarlySurrendered ? styles.grayBg : (myData.win ? styles.blueBg : styles.redBg)
+                const championImageURI = `./assets/championImage/${myData.championName}.png`;
                 return (
                     <View key={index}>
                         <TouchableOpacity key={index} style={[styles.match, bgColor]} onPress={() => openModal(index)}>
                             <View style={{ flexDirection: "row" }}>
                                 <Image
-                                    source={{ uri: `https://z.fow.kr/champ/${myData.championId}_64.png` }}
+                                    source={championImageURI}
                                     style={{ width: 50, height: 50 }}
                                 />
                                 <View style={{ flexDirection: "column", marginLeft: 5 }}>
@@ -94,7 +95,7 @@ const Matches = ({ gameData, id }) => {
                                                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                                                 <View style={{ flexDirection: "row" }}>
                                                                     <Image
-                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
+                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png`}}
                                                                         style={{ width: 40, height: 40 }}
                                                                     />
                                                                     <View style={{ marginLeft: 3 }}>
@@ -122,7 +123,7 @@ const Matches = ({ gameData, id }) => {
                                                                     <View style={{ flexDirection: "column" }}>
                                                                         <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
                                                                         <Text style={{ fontSize: 11 }}> {data.kills} / {data.deaths} / {data.assists}  CS {data.totalMinionsKilled}  KDA {((data.kills + data.assists) / data.deaths).toFixed(2)} </Text>
-                                                                        <Text style={{ fontSize: 11 }}> {data.totalDamageDealtToChampions} {data.goldEarned}G</Text>
+                                                                        <Text style={{ fontSize: 11 }}> {data.totalDamageDealtToChampions.toLocaleString()} {data.goldEarned.toLocaleString()}G 시야 {data.visionScore}</Text>
                                                                     </View>
                                                                 </View>
                                                                 <View style={{ flexDirection: 'column' }}>
@@ -188,10 +189,10 @@ const Matches = ({ gameData, id }) => {
                                                                         />
 
                                                                     </View>
-                                                                    <View style={{ flexDirection: "column", width: "50%" }}>
-                                                                        <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
+                                                                    <View style={{ flexDirection: "column", width: "50%", marginLeft: 3 }}>
+                                                                        <Text style={{ fontSize: 11, fontWeight: 600, marginBottom: 3 }}>{data.summonerName}</Text>
                                                                         <ProgressBar max={selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
-                                                .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions)[0].totalDamageDealtToChampions} value={data.totalDamageDealtToChampions} color={"teal"} />
+                                                .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions)[0].totalDamageDealtToChampions} value={data.totalDamageDealtToChampions} color={"#FA5858"} />
                                                                     </View>
                                                                 </View>
                                                                 <View style={{ flexDirection: 'column' }}>
@@ -259,10 +260,10 @@ const Matches = ({ gameData, id }) => {
                                                                         />
 
                                                                     </View>
-                                                                    <View style={{ flexDirection: "column", width: "50%" }}>
-                                                                        <Text style={{ fontSize: 11, fontWeight: 600 }}> {data.summonerName}</Text>
+                                                                    <View style={{ flexDirection: "column", width: "50%", marginLeft: 3 }}>
+                                                                        <Text style={{ fontSize: 11, fontWeight: 600, marginBottom: 3 }}>{data.summonerName}</Text>
                                                                         <ProgressBar max={selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
-                                                .sort((a, b) => b.goldEarned - a.goldEarned)[0].goldEarned} value={data.goldEarned} color={"gold"} />
+                                                .sort((a, b) => b.goldEarned - a.goldEarned)[0].goldEarned} value={data.goldEarned} color={"#FACC2E"} />
                                                                     
                                                                     </View>
                                                                 </View>

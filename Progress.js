@@ -6,7 +6,7 @@ const ProgressBar = ({ max,value, color }) => {
   const progressPercentage = `${Math.min(100, Math.max(0, (value/max)*100))}%`;
 
   return (
-    <View style={{width: '100%',
+    <View style={{width: '70%',
     height: 15,
     backgroundColor: '#e0e0e0',
     borderRadius: 3,
@@ -14,7 +14,7 @@ const ProgressBar = ({ max,value, color }) => {
       <View style={{height: '100%',
       borderRadius: 3,
       backgroundColor: color, width: progressPercentage }}>
-        <Text style={{ fontSize: 11 }}>{value}</Text>
+        <Text style={{ fontSize: 10, marginLeft: 3 }}>{value.toLocaleString()}</Text>
         </View>
     </View>
   );

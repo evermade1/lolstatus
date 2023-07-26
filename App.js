@@ -6,7 +6,7 @@ import Rank from './Rank'
 import Matches from './Matches';
 import styles from './styles'
 
-export const API_KEY = "RGAPI-3b478569-2ca4-4e54-9da1-605d173ef556"
+export const API_KEY = "RGAPI-0214719b-506f-4dc0-a010-a654be69ec9e"
 
 export default function App() {
   const [ok, setOk] = useState("")
