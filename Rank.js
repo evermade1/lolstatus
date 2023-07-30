@@ -9,9 +9,9 @@ const Rank = ({ rankData, flexData }) => {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         horizontal
-        contentContainerStyle={styles.weather}>
+        >
             <View style={styles.profile2}>
-                <Text style={{ marginTop: 20, fontSize: 15, fontWeight: 500 }}>솔로랭크</Text>
+                <Text style={{ marginTop: 10, fontSize: 15, fontWeight: 500 }}>솔로랭크</Text>
                 {rankData ?
                     <View style={styles.profile2}>
                         <Image

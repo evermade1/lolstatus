@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, Dimensions, Pressable } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import ProgressBar from './Progress';
 import styles from './styles'
 import { useState } from 'react';
@@ -22,6 +23,12 @@ const Matches = ({ gameData, id }) => {
     const setKAram = () => {
         setK(450)
     }
+    const handleModalPress = (event) => {
+        // 모달 바깥 영역 클릭 시에만 모달을 닫도록 처리
+        if (event.target === event.currentTarget) {
+          closeModal();
+        }
+      };
     gameData.sort(function (a, b) {
         return b.gameCreation - a.gameCreation;
     });
@@ -42,7 +49,6 @@ const Matches = ({ gameData, id }) => {
             {gameData.map((gameData, index) => {
                 const time = new Date(gameData.gameEndTimestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric' })
                 const myData = gameData.participants.filter((value) => value.summonerId == id)[0]
-
                 if (!myData) { return }
                 if (k && gameData.queueId !== k) { return }
                 // if (myData.length >= 20) {
@@ -50,13 +56,14 @@ const Matches = ({ gameData, id }) => {
                 //   }
 
                 const bgColor = myData.teamEarlySurrendered ? styles.grayBg : (myData.win ? styles.blueBg : styles.redBg)
-                const championImageURI = `./assets/championImage/${myData.championName}.png`;
+                // const championName = gameData.championName
+                // const championImageURI = `./assets/championImage/Ezreal.png`;
                 return (
                     <View key={index}>
                         <TouchableOpacity key={index} style={[styles.match, bgColor]} onPress={() => openModal(index)}>
                             <View style={{ flexDirection: "row" }}>
                                 <Image
-                                    source={championImageURI}
+                                    source={{ uri: `https://z.fow.kr/champ/${myData.championId}_64.png`}}
                                     style={{ width: 50, height: 50 }}
                                 />
                                 <View style={{ flexDirection: "column", marginLeft: 5 }}>
@@ -79,12 +86,11 @@ const Matches = ({ gameData, id }) => {
                             animationType="fade" // 모달이 열릴 때 애니메이션 유형 설정 (slide, fade 등)
                             transparent={true}   // 모달이 투명하게 보일지 여부 (true면 배경 투명)
                             visible={modalVisible} // 모달의 가시성 상태
+                            onBackdropPress={closeModal}
                         >
-
                             <View style={styles.modalContainer}>
                                 <View style={styles.modalContent}>
-
-                                    <ScrollView horizontal pagingEnabled>
+                                    <ScrollView horizontal pagingEnabled pointerEvents="box-none">
                                     <View>
                                     <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>Overall</Text></View>
                                             {selectedModalData && selectedModalData.participants.map((data, index) =>
@@ -296,11 +302,8 @@ const Matches = ({ gameData, id }) => {
                                         </View>
 
                                     </ScrollView>
-
-
-
-
                                 </View>
+                                
                             </View>
                         </Modal>
                     </View>

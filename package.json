@@ -13,6 +13,7 @@
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-native": "0.71.8",
+    "react-native-fast-image": "^8.6.3",
     "react-native-progress": "^5.0.0"
   },
   "devDependencies": {

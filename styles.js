@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     datas: {
       width: "100%",
       marginTop: 15,
-      paddingTop: 35,
+      paddingTop: 20,
       paddingBottom: 100
     },
     typeButtons: {
@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
     profile1: {
       flexDirection: "row",
       justifyContent: 'flex-start',
-      paddingHorizontal: 30
+      paddingHorizontal: 30,
+      paddingVertical: 20
     },
     tiers: {
       flexDirection: "row",
@@ -90,14 +91,17 @@ const styles = StyleSheet.create({
     nickname: {
       marginBottom: 5,
       fontSize: 22,
-      fontWeight: 600
+      fontWeight: 600,
+      color: "white"
     },
     level: {
-      marginBottom: 6,
-      fontSize: 20
+      marginBottom: 7,
+      fontSize: 20,
+      color: "white"
     },
     famous: {
-      fontSize: 13
+      fontSize: 13,
+      color: "white"
     },
     match: {
       flexDirection: "row",
@@ -109,6 +113,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
       flex: 1,
+      // position: "relative",
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -121,6 +126,14 @@ const styles = StyleSheet.create({
        // 모달의 너비를 70%로 설정
       width: "100%"
       //width: SCREEN_WIDTH
+    },
+    modalOverlay: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // 흐리게 보이는 오버레이 (투명도 0.5)
     },
     matchTeam: {
       width: "100%"
