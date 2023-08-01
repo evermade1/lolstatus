@@ -6,6 +6,29 @@ import { useState } from 'react';
 
 const Matches = ({ gameData, id }) => {
     //const gameDataKeys = Object.keys(gameData);
+    const QUEUETYPE = {
+        400: '일반', //Normal Draft Pick
+        420: '솔로랭크',
+        430: '일반',
+        440: '자유랭크',
+        450: '무작위 총력전',
+        700: '격전',
+        800: 'ai',  // Deprecated
+        810: 'ai',  // Deprecated
+        820: 'ai',  // Deprecated
+        830: 'ai',
+        840: 'ai',
+        850: 'ai',
+        900: '우르프',
+        920: '전설의 포로 왕',
+        1020: '단일 챔피언',
+        1300: 'nbg',
+        1400: '궁극기 주문서', // Ultimate Spellbook
+        1700: "아레나",
+        2000: 'tut',
+        2010: 'tut',
+        2020: 'tut',
+    }
     const [k, setK] = useState(null)
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedModalData, setSelectedModalData] = useState(null);
@@ -33,7 +56,7 @@ const Matches = ({ gameData, id }) => {
         return b.gameCreation - a.gameCreation;
     });
     return (
-        <View style={{ marginTop: 20, paddingHorizontal: 30, marginBottom: 100 }}>
+        <View style={{ paddingHorizontal: 30, marginBottom: 100 }}>
             <View style={styles.typeButtons}>
                 <TouchableOpacity onPress={setKSolo} style={styles.typeButton}>
                     <Text style={styles.buttonsFont}>솔로랭크</Text>
@@ -75,7 +98,7 @@ const Matches = ({ gameData, id }) => {
                                             <Text>  {myData.teamEarlySurrendered ? "무효" : (myData.win ? "승리" : "패배")}</Text>
                                         </Text>
                                     </View>
-                                    <Text style={{ marginTop: 5 }}>{gameData.queueId == "420" ? "솔로랭크" : (gameData.queueId == "440" ? "자유랭크" : "무작위 총력전")}</Text>
+                                    <Text style={{ marginTop: 5 }}>{QUEUETYPE[gameData.queueId]}</Text>
                                 </View>
                             </View>
                             <View>

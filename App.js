@@ -7,7 +7,7 @@ import Active from './Active';
 import Matches from './Matches';
 import styles from './styles'
 
-export const API_KEY = "RGAPI-9ccde979-5402-4072-9d5d-e55a25efbabb"
+export const API_KEY = "RGAPI-56a65d97-db31-4f92-8b0d-f7af2fdd4155"
 
 export default function App() {
   const [ok, setOk] = useState("")
