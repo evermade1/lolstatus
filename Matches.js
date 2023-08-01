@@ -32,6 +32,7 @@ const Matches = ({ gameData, id }) => {
     const [k, setK] = useState(null)
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedModalData, setSelectedModalData] = useState(null);
+    const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
     const openModal = (index) => {
         setSelectedModalData(gameData[index]);
         setModalVisible(true);
@@ -46,17 +47,14 @@ const Matches = ({ gameData, id }) => {
     const setKAram = () => {
         setK(450)
     }
-    const handleModalPress = (event) => {
-        // 모달 바깥 영역 클릭 시에만 모달을 닫도록 처리
-        if (event.target === event.currentTarget) {
-          closeModal();
-        }
+    const handleButtonClick = (index) => {
+        setSelectedButtonIndex(index === selectedButtonIndex ? null : index);
       };
     gameData.sort(function (a, b) {
         return b.gameCreation - a.gameCreation;
     });
     return (
-        <View style={{ paddingHorizontal: 30, marginBottom: 100 }}>
+        <View style={{ paddingHorizontal: 30, marginBottom: 50 }}>
             <View style={styles.typeButtons}>
                 <TouchableOpacity onPress={setKSolo} style={styles.typeButton}>
                     <Text style={styles.buttonsFont}>솔로랭크</Text>
@@ -83,7 +81,7 @@ const Matches = ({ gameData, id }) => {
                 // const championImageURI = `./assets/championImage/Ezreal.png`;
                 return (
                     <View key={index}>
-                        <TouchableOpacity key={index} style={[styles.match, bgColor]} onPress={() => openModal(index)}>
+                        <TouchableOpacity key={index} style={[styles.match, bgColor]} onPress={() => handleButtonClick(index)}>
                             <View style={{ flexDirection: "row" }}>
                                 <Image
                                     source={{ uri: `https://z.fow.kr/champ/${myData.championId}_64.png`}}
@@ -105,26 +103,24 @@ const Matches = ({ gameData, id }) => {
                                 <Text> {time}</Text>
                             </View>
                         </TouchableOpacity>
-                        <Modal
-                            animationType="fade" // 모달이 열릴 때 애니메이션 유형 설정 (slide, fade 등)
-                            transparent={true}   // 모달이 투명하게 보일지 여부 (true면 배경 투명)
-                            visible={modalVisible} // 모달의 가시성 상태
-                            onBackdropPress={closeModal}
-                        >
+                        <View>
+                            {selectedButtonIndex === index &&
                             <View style={styles.modalContainer}>
                                 <View style={styles.modalContent}>
                                     <ScrollView horizontal pagingEnabled pointerEvents="box-none">
-                                    <View>
-                                    <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>Overall</Text></View>
-                                            {selectedModalData && selectedModalData.participants.map((data, index) =>
+                                    
+                                            <View>
+
+                                                <View style={{ height: 20, justifyContent: "center", alignItems: "center" }}><Text style={{ fontWeight: 600 }}>Overall</Text></View>
+                                                {gameData && gameData.participants.map((data, index) =>
                                                 (
-                                                    
+
                                                     <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
-                                                        <View style={{ margin: 5, width: Dimensions.get('window').width * 0.9 - 30 }}>
+                                                        <View style={{ margin: 5, width: Dimensions.get('window').width - 70 }}>
                                                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                                                 <View style={{ flexDirection: "row" }}>
                                                                     <Image
-                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png`}}
+                                                                        source={{ uri: `https://z.fow.kr/champ/${data.championId}_64.png` }}
                                                                         style={{ width: 40, height: 40 }}
                                                                     />
                                                                     <View style={{ marginLeft: 3 }}>
@@ -177,19 +173,18 @@ const Matches = ({ gameData, id }) => {
 
                                                             </View>
                                                         </View>
-                                                        
+
                                                     </View>
 
                                                 ))}
-
-                                        </View>
+                                            </View>
                                         <View>
                                         <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>딜량</Text></View>
-                                            {selectedModalData && selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                            {gameData && gameData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
                                                 .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions).map((data, index) =>
                                                 (
                                                     <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
-                                                        <View style={{ margin: 5, width: Dimensions.get('window').width * 0.9 - 30}}>
+                                                        <View style={{ margin: 5, width: Dimensions.get('window').width - 70}}>
                                                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                                                 <View style={{ flexDirection: "row" }}>
                                                                     <Image
@@ -220,7 +215,7 @@ const Matches = ({ gameData, id }) => {
                                                                     </View>
                                                                     <View style={{ flexDirection: "column", width: "50%", marginLeft: 3 }}>
                                                                         <Text style={{ fontSize: 11, fontWeight: 600, marginBottom: 3 }}>{data.summonerName}</Text>
-                                                                        <ProgressBar max={selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                                                        <ProgressBar max={gameData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
                                                 .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions)[0].totalDamageDealtToChampions} value={data.totalDamageDealtToChampions} color={"#FA5858"} />
                                                                     </View>
                                                                 </View>
@@ -255,12 +250,12 @@ const Matches = ({ gameData, id }) => {
                                         <View>
                                             <View style={{height: 20, justifyContent: "center", alignItems: "center"}}><Text style={{fontWeight: 600}}>획득한 골드</Text></View>
                                         
-                                            {selectedModalData && selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                            {gameData && gameData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
                                                 .sort((a, b) => b.goldEarned - a.goldEarned).map((data, index) =>
                                                 // 여기
                                                 (
                                                     <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
-                                                        <View style={{ margin: 5, width: Dimensions.get('window').width * 0.9 - 30}}>
+                                                        <View style={{ margin: 5, width: Dimensions.get('window').width - 70}}>
                                                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                                                 <View style={{ flexDirection: "row" }}>
                                                                     <Image
@@ -291,7 +286,7 @@ const Matches = ({ gameData, id }) => {
                                                                     </View>
                                                                     <View style={{ flexDirection: "column", width: "50%", marginLeft: 3 }}>
                                                                         <Text style={{ fontSize: 11, fontWeight: 600, marginBottom: 3 }}>{data.summonerName}</Text>
-                                                                        <ProgressBar max={selectedModalData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
+                                                                        <ProgressBar max={gameData.participants.slice() // 새로운 배열을 생성하여 원본 배열을 변경하지 않도록 합니다.
                                                 .sort((a, b) => b.goldEarned - a.goldEarned)[0].goldEarned} value={data.goldEarned} color={"#FACC2E"} />
                                                                     
                                                                     </View>
@@ -327,8 +322,8 @@ const Matches = ({ gameData, id }) => {
                                     </ScrollView>
                                 </View>
                                 
-                            </View>
-                        </Modal>
+                            </View>}
+                        </View>
                     </View>
                 )
             }

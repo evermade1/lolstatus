@@ -116,13 +116,9 @@ const styles = StyleSheet.create({
       // position: "relative",
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: "5%"
     },
     modalContent: {
       backgroundColor: '#fff',
-      borderRadius: 8,
-      padding: 10,
        // 모달의 너비를 70%로 설정
       width: "100%"
       //width: SCREEN_WIDTH
