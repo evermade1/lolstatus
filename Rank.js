@@ -1,16 +1,49 @@
 import styles from './styles'
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { famous } from './Famous';
 
 const Rank = ({ rankData, flexData }) => {
+    
+    const bgColor = {
+        0: "white",
+        "iron" : "#848484",
+        "bronze" : "#886A08",
+        "silver" : "#D8D8D8",
+        "gold" : "#F5F6CE",
+        "platinum" : "#CEF6EC",
+        "emerald" : "#CEF6EC",
+        "diamond" : "#CEF6F5",
+        "master" : "#F6CEF5",
+        "grandmaster" : "#F6D8CE",
+        "challenger" : "#CEE3F6"
+    }
+    const bgColor2 = {
+        0: "white",
+        "iron" : "#848484",
+        "bronze" : "#886A08",
+        "silver" : "#F2F2F2",
+        "gold" : "#F5F6CE",
+        "platinum" : "#CEF6EC",
+        "emerald" : "#CEF6EC",
+        "diamond" : "#CEF6F5",
+        "master" : "#F6CEF5",
+        "grandmaster" : "#F6D8CE",
+        "challenger" : "#F5F6CE"
+    }
+    // const bgColor2 = myData.teamEarlySurrendered ? "#F2F2F2" : (myData.win ? "#CEF6EC" : "#F6D8CE")
     return (
     <ScrollView
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         horizontal
         >
-            <View style={styles.profile2}>
+            <LinearGradient style={styles.profile2}
+            colors={["#ffffff", bgColor[rankData ? rankData.tier.toLowerCase() : 0],"#ffffff"]}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}>
+                
                 <Text style={{ marginTop: 10, fontSize: 15, fontWeight: 500 }}>솔로랭크</Text>
                 {rankData ?
                     <View style={styles.profile2}>
@@ -28,8 +61,11 @@ const Rank = ({ rankData, flexData }) => {
                         <Text style={{ marginTop: 20, fontSize: 15, fontWeight: 500 }}>언랭</Text>
                     </View>
                 }
-            </View>
-            <View style={styles.profile2}>
+            </LinearGradient>
+            <LinearGradient style={styles.profile2}
+            colors={["#ffffff", bgColor[flexData ? flexData.tier.toLowerCase() : 0],"#ffffff"]}
+            start={{ x: 0.5, y: 0 }}
+            end={{ x: 0.5, y: 1 }}>
                 <Text style={{ marginTop: 20, fontSize: 15, fontWeight: 500 }}>자유랭크</Text>
                 {flexData ? <View style={styles.profile2}>
                     <Image
@@ -46,7 +82,7 @@ const Rank = ({ rankData, flexData }) => {
                     <Text style={{ marginTop: 20, fontSize: 15, fontWeight: 500 }}>언랭</Text>
 
                 </View>}
-            </View>
+            </LinearGradient>
         </ScrollView>
     )
 }

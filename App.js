@@ -1,23 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import Profile from './Profile'
 import Rank from './Rank'
 import Active from './Active';
 import Matches from './Matches';
 import styles from './styles'
 
-export const API_KEY = "RGAPI-56a65d97-db31-4f92-8b0d-f7af2fdd4155"
 
 export default function App() {
+  const [API_KEY, setAPI_KEY] = useState("RGAPI-441931f5-b73c-49a1-9766-b6c2803f4709")
+  const [api, setApi] = useState(null)
   const [ok, setOk] = useState("")
   const [text, setText] = useState("")
+  const [text1, setText1] = useState("")
   const [summonerName, setSummonerName] = useState("")
   const [summonerData, setSummonerData] = useState(null) //소환사 이름, 레벨 등 정보
   const [rankData, setRankData] = useState(null) //소환사 솔로랭크 정보
   const [flexData, setFlexData] = useState(null) //소환사 자유랭크 정보
   const [gameData, setGameData] = useState([]) //최근 전적
   const [activeData, setActiveData] = useState([])
+
+  const reset = () => {
+    setOk("")
+    setSummonerData(null)
+    setRankData(null)
+    setFlexData(null)
+    setGameData([])
+    setActiveData([])
+  }
+  
+  const apiVisible = () => {
+    api ? setApi(null) : setApi("1")
+  }
+  const sendApiKey = () => {
+    setAPI_KEY(text1)
+  }
   const abc = async (name) => {
     setOk("1")
     setSummonerData(null)
@@ -62,12 +80,22 @@ export default function App() {
   const onChangeText = (name) => {
     setText(name)
   }
+  const onChangeText1 = (value) => {
+    setText1(value)
+  }
+  const handleButtonPress = async (dataFromMatches) => {
+    console.log(dataFromMatches);
+    setSummonerName(dataFromMatches)
+    await abc(dataFromMatches)
+  };
   return (
     
     <View style={styles.container}>
-      <View style={styles.logo}>
+      <TouchableWithoutFeedback style={styles.logo} onPress={reset}>
+        <View style={styles.logo}>
         <Text style={styles.logofont}>MOO.GG</Text>
-      </View>
+        </View>
+      </TouchableWithoutFeedback>
       <View style={styles.topBar}>
         <TextInput style={styles.button}
           onSubmitEditing={sendSummonerName}
@@ -84,10 +112,29 @@ export default function App() {
             <Profile summonerData={summonerData} />
             <Rank rankData={rankData} flexData={flexData} />
             <Active activeData={activeData} />
-            <Matches gameData={gameData} id={summonerData.id} />
+            <Matches gameData={gameData} id={summonerData.id} onButtonPress={handleButtonPress} />
           </ScrollView>) 
        // rankData == null
-       : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : null)} 
+       : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : 
+          <View style={{ alignItems: "center" }}>
+            {api &&
+            <View style={{ ...styles.topBar, margin: 15, marginLeft: 20 }}>
+              <TextInput style={styles.button}
+                onSubmitEditing={sendApiKey}
+                onChangeText={onChangeText1}
+                value={text1}
+                placeholder='API KEY를 입력하세요.' />
+              <TouchableOpacity style={styles.searchButton}
+                onPress={sendApiKey}>
+                <Text>완료</Text>
+              </TouchableOpacity>
+            </View>}
+            <TouchableOpacity onPress={apiVisible}>
+            <Image
+              source={{ uri: `https://pbs.twimg.com/media/Elq3NXrU8AAK3Xq.jpg` }}
+              style={{ marginTop: 150, width: 200, height: 210, borderRadius: 15, marginRight: 15 }} />
+            </TouchableOpacity>
+          </View>)} 
       
       <StatusBar style="auto" />
       
