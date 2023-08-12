@@ -9,7 +9,7 @@ import styles from './styles'
 
 
 export default function App() {
-  const [API_KEY, setAPI_KEY] = useState("RGAPI-441931f5-b73c-49a1-9766-b6c2803f4709")
+  const [API_KEY, setAPI_KEY] = useState("RGAPI-dcc0c285-4d2d-48ce-bba6-d5e4fec056b8")
   const [api, setApi] = useState(null)
   const [ok, setOk] = useState("")
   const [text, setText] = useState("")
@@ -46,11 +46,12 @@ export default function App() {
     const response = await fetch(`https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}?api_key=${API_KEY}`)
     const json = await response.json()
     setSummonerData(json)
-    if (json.hasOwnProperty("status")) {
-      setSummonerData(null)
-      }
+    // if (json.hasOwnProperty("status")) {
+    //   setSummonerData(null)
+    //   }
     
-    else{
+    // else{
+    if (!json.hasOwnProperty("status")) {
       const response1 = await fetch(`https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${json.id}?api_key=${API_KEY}`)
       const json1 = await response1.json()
       const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=30&api_key=${API_KEY}`)
@@ -115,7 +116,8 @@ export default function App() {
             <Matches gameData={gameData} id={summonerData.id} onButtonPress={handleButtonPress} />
           </ScrollView>) 
        // rankData == null
-       : (ok !== "" ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : 
+       : (ok !== "" ? 
+       (summonerData && summonerData.hasOwnProperty("status") ? <Text style={styles.errorPage}>등록된 소환사가 없습니다.</Text> : null ) : 
           <View style={{ alignItems: "center" }}>
             {api &&
             <View style={{ ...styles.topBar, margin: 15, marginLeft: 20 }}>
