@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, Dimensions, Pressable } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Picker } from '@react-native-picker/picker';
 import ProgressBar from './Progress';
 import styles from './styles'
-import { useState } from 'react';
+import Badge from './Badge'
+import { useEffect, useState } from 'react';
 
 const Matches = ({ gameData, id, onButtonPress }) => {
   //const gameDataKeys = Object.keys(gameData);
@@ -32,39 +34,49 @@ const Matches = ({ gameData, id, onButtonPress }) => {
   }
   const [k, setK] = useState(null)
   const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
-  const [matchesDataInMatches, setMatchesDataInMatches] = useState('');
-  const setKSolo = () => {
-    setK(420)
-  }
-  const setKFlex = () => {
-    setK(440)
-  }
-  const setKAram = () => {
-    setK(450)
-  }
   const handleInternalButtonPress = (x) => () => {
+    setSelectedButtonIndex('')
     onButtonPress(x); // 데이터와 함께 함수 호출
   };
   const handleButtonClick = (index) => {
     setSelectedButtonIndex(index === selectedButtonIndex ? null : index);
   };
+
   gameData.sort(function (a, b) {
     return b.gameCreation - a.gameCreation;
   });
   return (
     <View style={{ paddingHorizontal: 30, marginBottom: 50 }}>
       <View style={styles.typeButtons}>
-        <TouchableOpacity onPress={setKSolo} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setK(null)} style={styles.typeButton}>
+          <Text style={styles.buttonsFont}>전체</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setK(420)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>솔로랭크</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={setKFlex} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setK(440)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>자유랭크</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={setKAram} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setK(430)} style={styles.typeButton}>
+          <Text style={styles.buttonsFont}>일반</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setK(450)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>무작위 총력전</Text>
         </TouchableOpacity>
-
       </View>
+      {/* <TouchableOpacity onPress={handlePickerClick} style={{...styles.typeButton, height: 30}}>
+                    <Text style={styles.buttonsFont}>게임 종류</Text>
+                </TouchableOpacity>
+      {isVisible && <Picker  
+               selectedValue={selectedValue}
+               onValueChange={handleValueChange}>
+            <Picker.Item label='전체' value="null" />
+            <Picker.Item label='솔로랭크' value="420"/>
+            <Picker.Item label='자유랭크' value="440"/>
+            <Picker.Item label='무작위 총력전' value="450"/>
+        </Picker>} */}
+
+  
       {gameData.map((gameData, index) => {
         const time = new Date(gameData.gameEndTimestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric' })
         const myData = gameData.participants.filter((value) => value.summonerId == id)[0]
@@ -93,39 +105,37 @@ const Matches = ({ gameData, id, onButtonPress }) => {
                 <View style={{ flexDirection: "row" }}>
                   <Image
                     source={{ uri: `https://z.fow.kr/champ/${myData.championId}_64.png` }}
-                    style={{ width: 50, height: 50 }}
+                    style={{ width: 50, height: 50, borderRadius: 10 }}
                   />
+                  <View style={{ marginLeft: 3 }}>
+                                    <Image
+                                      source={{ uri: `https://z.fow.kr/spell/${myData.summoner1Id}.png` }}
+                                      style={{ width: 22, height: 22, margin: 1.5, borderRadius: 5 }}
+                                    />
+                                    <Image
+                                      source={{ uri: `https://z.fow.kr/spell/${myData.summoner2Id}.png` }}
+                                      style={{ width: 22, height: 22, margin: 1.5, borderRadius: 5 }}
+                                    />
+                                    </View>
                   <View style={{ flexDirection: "column", marginLeft: 5 }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text>
+                      <Text style={{fontSize: 13, fontWeight: 600, color: "#424242"}}>
                         <Text>{myData.kills} /</Text>
                         <Text> {myData.deaths} /</Text>
                         <Text> {myData.assists}</Text>
-                        <Text>  {myData.teamEarlySurrendered ? "무효" : (myData.win ? "승리" : "패배")}</Text>
+                        
                       </Text>
                     </View>
-                    <Text style={{ marginTop: 5 }}>{QUEUETYPE[gameData.queueId]}</Text>
+                    <Text style={{ marginTop: 4, fontSize: 12, color: "#424242" }}>{QUEUETYPE[gameData.queueId]}</Text>
+                    <Text style={{ marginTop: 4, fontSize: 12, color: "#424242", fontWeight: 600 }}>{myData.teamEarlySurrendered ? "무효" : (myData.win ? "승리" : "패배")}</Text>
                   </View>
-                  <View style={{ flexDirection: "row", marginLeft: 5, flexWrap: "wrap", width: 110 }}>
-                    {myData.doubleKills !== 0 && myData.tripleKills == 0 ? <View style={{ backgroundColor: "#FA5858", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>더블킬</Text></View> : null}
-                    {myData.tripleKills !== 0 && myData.quadraKills == 0 ? <View style={{ backgroundColor: "#FE2E2E", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>트리플킬</Text></View> : null}
-                    {myData.quadraKills !== 0 && myData.pentaKills == 0 ? <View style={{ backgroundColor: "#DF0101", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>쿼드라킬</Text></View> : null}
-                    {myData.pentaKills !== 0 ? <View style={{ backgroundColor: "#B40404", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>펜타킬</Text></View> : null}
-                    {myData.firstBloodKill ? <View style={{ backgroundColor: "red", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>퍼블</Text></View> : null}
-                    {myData.firstTowerKill ? <View style={{ backgroundColor: "#5882FA", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>포블</Text></View> : null}
-                    {myData.challenges && myData.challenges.soloKills ? <View style={{ backgroundColor: "#8904B1", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>솔킬{myData.challenges.soloKills}회</Text></View> : null}
-                    {gameData.participants.slice().sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions)[0].totalDamageDealtToChampions === myData.totalDamageDealtToChampions ? <View style={{ backgroundColor: "red", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>딜신</Text></View> : null}
-                    {gameData.participants.slice().sort((a, b) => b.goldEarned - a.goldEarned)[0].goldEarned === myData.goldEarned ? <View style={{ backgroundColor: "#FFBF00", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>갑부</Text></View> : null}
-                    {gameData.participants.slice().sort((a, b) => b.kills - a.kills)[0].kills === myData.kills ? <View style={{ backgroundColor: "red", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>학살자</Text></View> : null}
-                    {gameData.participants.slice().sort((a, b) => b.champExperience - a.champExperience)[0].champExperience === myData.champExperience ? <View style={{ backgroundColor: "#86B404", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>경험자</Text></View> : null}
-                    {myData.challenges && gameData.participants.slice().sort((a, b) => b.challenges.skillshotsHit - a.challenges.skillshotsHit)[0].challenges.skillshotsHit === myData.challenges.skillshotsHit ? <View style={{ backgroundColor: "#0174DF", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>저격수</Text></View> : null}
-                    {myData.challenges && gameData.participants.slice().sort((a, b) => b.challenges.skillshotsDodged - a.challenges.skillshotsDodged)[0].challenges.skillshotsDodged === myData.challenges.skillshotsDodged ? <View style={{ backgroundColor: "#088A29", padding: 2, marginHorizontal: 2, marginTop: 1, borderRadius: 3, height: "30%" }}><Text style={{ fontSize: 10, color: "white" }}>무희</Text></View> : null}
-
-
+                  <View >
+                    <Badge myData={myData} gameData={gameData} />
                   </View>
                 </View>
                 <View>
-                  <Text> {time}</Text>
+                  <Text style={{fontSize: 12, fontWeight: 500, color: "#424242"}}> {time}</Text>
+                  <Text style={{marginTop: 2, fontSize: 10, fontWeight: 500, color: "#424242"}}> {Math.floor(gameData.gameDuration/60)}분 {gameData.gameDuration%60}초</Text>
                 </View>
               </LinearGradient>
             </TouchableOpacity>

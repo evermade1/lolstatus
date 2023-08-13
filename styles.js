@@ -59,15 +59,16 @@ const styles = StyleSheet.create({
     },
     typeButton: {
       backgroundColor: "lightgray",
-      width: "30%",
+      width: "19%",
       //height: "10%",
-      borderRadius: 10,
+      borderRadius: 5,
       alignItems: "center",
-      justifyContent: "center"
+      justifyContent: "center",
+      // marginHorizontal: 3
     },
     buttonsFont: {
       margin: 3,
-      fontSize: 15
+      fontSize: 10
     },
     imagebackground: {
       width: "100%"
@@ -156,6 +157,13 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       backgroundColor: '#3f51b5',
     },
+    badge: {
+      padding: 2, 
+      marginHorizontal: 2, 
+      marginTop: 1, 
+      borderRadius: 3, 
+      height: 15 
+    }
   });
 
 export default styles;

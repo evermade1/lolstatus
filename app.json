@@ -3,7 +3,9 @@
     "name": "lolstatus",
     "slug": "lolstatus",
     "version": "1.0.0",
-    "assetBundlePatterns": ["./assets/championImage/*"],
+    "assetBundlePatterns": [
+      "./assets/championImage/*"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,18 +14,24 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.evermade1.lolstatus"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.evermade1.lolstatus"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "89875907-2b46-46de-bf85-1e893761770e"
+      }
     }
   }
 }
