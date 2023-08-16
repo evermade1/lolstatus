@@ -1,13 +1,11 @@
-import { StyleSheet, Text, View, TextInput, Image, ScrollView, TouchableOpacity, Modal, Button, TouchableWithoutFeedback, Dimensions, Pressable } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Text, View, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Picker } from '@react-native-picker/picker';
 import ProgressBar from './Progress';
 import styles from './styles'
 import Badge from './Badge'
 import { useEffect, useState } from 'react';
 
-const Matches = ({ gameData, id, onButtonPress }) => {
+const Matches = ({ gameData, id, onButtonPress}) => {
   //const gameDataKeys = Object.keys(gameData);
   const QUEUETYPE = {
     400: '일반', //Normal Draft Pick
@@ -33,20 +31,24 @@ const Matches = ({ gameData, id, onButtonPress }) => {
     2020: 'tut',
   }
   const [k, setK] = useState(null)
-  const [selectedButtonIndex, setSelectedButtonIndex] = useState(null);
+  const [selectedButtonIndex, setSelectedButtonIndex] = useState(null); //유저가 클릭한 매치를 저장하는 변수
   const handleInternalButtonPress = (x) => () => {
-    setSelectedButtonIndex('')
+    setSelectedButtonIndex(null)
     onButtonPress(x); // 데이터와 함께 함수 호출
-  };
+  }; //디테일에서 클릭 후 검색될 경우
+  useEffect(() => {
+    setSelectedButtonIndex(null)
+  },[gameData]) //검색창에서 검색할 경우
   const handleButtonClick = (index) => {
     setSelectedButtonIndex(index === selectedButtonIndex ? null : index);
-  };
+  }; //유저가 클릭한 매치 디테일 여는 함수
+  
 
   gameData.sort(function (a, b) {
     return b.gameCreation - a.gameCreation;
-  });
+  }); //시간 순서로 정렬
   return (
-    <View style={{ paddingHorizontal: 30, marginBottom: 50 }}>
+    <View style={{ paddingHorizontal: 20, marginBottom: 50 }}>
       <View style={styles.typeButtons}>
         <TouchableOpacity onPress={() => setK(null)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>전체</Text>
@@ -78,17 +80,17 @@ const Matches = ({ gameData, id, onButtonPress }) => {
 
   
       {gameData.map((gameData, index) => {
-        const time = new Date(gameData.gameEndTimestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric' })
-        const myData = gameData.participants.filter((value) => value.summonerId == id)[0]
-        if (!myData) { return }
-        if (k && gameData.queueId !== k) { return }
+        const time = new Date(gameData.gameEndTimestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric' }) //Date 형태의 시간을 변환
+        const myData = gameData.participants.filter((value) => value.summonerId == id)[0] //전체 데이터에서 내 데이터만 추출
+        if (!myData) { return } //내 데이터가 없으면 실행x
+        if (k && gameData.queueId !== k) { return } //유저가 원하는 게임 종류만 출력
         // if (myData.length >= 20) {
         //     myData.splice(20);
         //   }
 
         // const bgColor = myData.teamEarlySurrendered ? styles.grayBg : (myData.win ? styles.blueBg : styles.redBg)
-        const bgColor = myData.teamEarlySurrendered ? "#F2F2F2" : (myData.win ? "#A9E2F3" : "#F5A9A9")
-        const bgColor2 = myData.teamEarlySurrendered ? "#F2F2F2" : (myData.win ? "#CEF6EC" : "#F6D8CE")
+        const bgColor = myData.gameEndedInEarlySurrender ? "#D8D8D8" : (myData.win ? "#A9E2F3" : "#F5A9A9") //배경 그라데이션 1
+        const bgColor2 = myData.gameEndedInEarlySurrender ? "#D8D8D8" : (myData.win ? "#CEF6EC" : "#F6D8CE") //배경 그라데이션 2
 
         // const championName = gameData.championName
         // const championImageURI = `./assets/championImage/Ezreal.png`;
@@ -104,33 +106,41 @@ const Matches = ({ gameData, id, onButtonPress }) => {
               >
                 <View style={{ flexDirection: "row" }}>
                   <Image
-                    source={{ uri: `https://z.fow.kr/champ/${myData.championId}_64.png` }}
+                    source={{ uri: `https://z.fow.kr/champ/${myData.championId}_64.png` }} // 챔피언
                     style={{ width: 50, height: 50, borderRadius: 10 }}
                   />
                   <View style={{ marginLeft: 3 }}>
-                                    <Image
-                                      source={{ uri: `https://z.fow.kr/spell/${myData.summoner1Id}.png` }}
-                                      style={{ width: 22, height: 22, margin: 1.5, borderRadius: 5 }}
-                                    />
-                                    <Image
-                                      source={{ uri: `https://z.fow.kr/spell/${myData.summoner2Id}.png` }}
-                                      style={{ width: 22, height: 22, margin: 1.5, borderRadius: 5 }}
-                                    />
-                                    </View>
-                  <View style={{ flexDirection: "column", marginLeft: 5 }}>
+                    <Image
+                      source={{ uri: `https://z.fow.kr/spell/${myData.summoner1Id}.png` }} // 스펠1
+                      style={{ width: 22, height: 22, margin: 1.5, borderRadius: 5 }}
+                    />
+                    <Image
+                      source={{ uri: `https://z.fow.kr/spell/${myData.summoner2Id}.png` }} // 스펠2
+                      style={{ width: 22, height: 22, margin: 1.5, borderRadius: 5 }}
+                    />
+                  </View>
+                  <View style={{ flexDirection: "column", marginLeft: 5, width: 75 }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                       <Text style={{fontSize: 13, fontWeight: 600, color: "#424242"}}>
                         <Text>{myData.kills} /</Text>
                         <Text> {myData.deaths} /</Text>
                         <Text> {myData.assists}</Text>
-                        
                       </Text>
                     </View>
-                    <Text style={{ marginTop: 4, fontSize: 12, color: "#424242" }}>{QUEUETYPE[gameData.queueId]}</Text>
-                    <Text style={{ marginTop: 4, fontSize: 12, color: "#424242", fontWeight: 600 }}>{myData.teamEarlySurrendered ? "무효" : (myData.win ? "승리" : "패배")}</Text>
+                    <Text style={{ marginTop: 4, fontSize: 12, color: "#424242", fontWeight: 600 }}>{QUEUETYPE[gameData.queueId]}</Text>
+                    <Text style={{ marginTop: 4, fontSize: 12, color: myData.gameEndedInEarlySurrender ? "#424242" : (myData.win ? "#0080FF" : "#FF4000"), fontWeight: 600 }}>{myData.gameEndedInEarlySurrender ? "다시하기" : (myData.win ? "승리" : "패배")}</Text>
                   </View>
-                  <View >
-                    <Badge myData={myData} gameData={gameData} />
+                  <View>
+                    <View style={{ flexDirection: "row", marginLeft: 4 }}>
+                      {[0, 1, 2, 3, 4, 5, 6].map((itemIndex) => (
+                        <Image
+                          key={itemIndex}
+                          source={{ uri: `https://z.fow.kr/items3/${myData[`item${itemIndex}`]}.png` }}
+                          style={{ width: 17, height: 17, margin: 1, borderRadius: 5 }}
+                        />
+                      ))}
+                    </View>
+                    {!myData.gameEndedInEarlySurrender && <Badge myData={myData} gameData={gameData} />}
                   </View>
                 </View>
                 <View>
@@ -153,7 +163,7 @@ const Matches = ({ gameData, id, onButtonPress }) => {
                         (
 
                           <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
-                            <View style={{ margin: 5, width: Dimensions.get('window').width - 70 }}>
+                            <View style={{ margin: 5, width: Dimensions.get('window').width - 50 }}>
                               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                 <View style={{ flexDirection: "row" }}>
                                   <Image
@@ -223,7 +233,7 @@ const Matches = ({ gameData, id, onButtonPress }) => {
                           .sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions).map((data, index) =>
                           (
                             <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
-                              <View style={{ margin: 5, width: Dimensions.get('window').width - 70 }}>
+                              <View style={{ margin: 5, width: Dimensions.get('window').width - 50 }}>
                                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                   <View style={{ flexDirection: "row" }}>
                                     <Image
@@ -294,7 +304,7 @@ const Matches = ({ gameData, id, onButtonPress }) => {
                           // 여기
                           (
                             <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
-                              <View style={{ margin: 5, width: Dimensions.get('window').width - 70 }}>
+                              <View style={{ margin: 5, width: Dimensions.get('window').width - 50 }}>
                                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                   <View style={{ flexDirection: "row" }}>
                                     <Image

@@ -1,6 +1,6 @@
 import styles from './styles'
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, Dimensions, ImageBackground } from 'react-native';
+import React from 'react';
+import { View, Text, Image, ImageBackground } from 'react-native';
 import { famous } from './Famous';
 
 const Profile = ({ summonerData }) => {

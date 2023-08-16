@@ -159,10 +159,20 @@ const styles = StyleSheet.create({
     },
     badge: {
       padding: 2, 
-      marginHorizontal: 2, 
-      marginTop: 1, 
+      marginRight: 3, 
+      marginTop: 2, 
       borderRadius: 3, 
       height: 15 
+    },
+    badgeFont: {
+      fontSize: 10,
+      color: "white",
+      textShadowColor: 'white',
+      textShadowOffset: {
+        width: 0,
+        height: 0,
+      },
+      textShadowRadius: 2,
     }
   });
 

@@ -1,9 +1,7 @@
 import styles from './styles'
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
+import React from 'react';
+import { View, Text, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { famous } from './Famous';
-
 const Rank = ({ rankData, flexData }) => {
     
     const bgColor = {
