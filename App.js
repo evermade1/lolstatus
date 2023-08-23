@@ -1,6 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView, TouchableWithoutFeedback, Alert } from 'react-native';
+import { Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView, TouchableWithoutFeedback, Alert, FlatList } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Feather } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 import Profile from './Profile'
 import Rank from './Rank'
 import Active from './Active';
@@ -9,7 +12,7 @@ import styles from './styles'
 
 
 export default function App() {
-  const [API_KEY, setAPI_KEY] = useState("RGAPI-493e95ac-3e67-4b0f-9f88-957993a01f1d")
+  const [API_KEY, setAPI_KEY] = useState("RGAPI-b4435c60-e79f-4759-9be7-cea1128d05f1")
   const [api, setApi] = useState(null) //api 입력 화면 여부
   const [ok, setOk] = useState("") //초기상태 여부
   const [text, setText] = useState("") //소환사명 입력값
@@ -19,8 +22,59 @@ export default function App() {
   const [flexData, setFlexData] = useState(null) //자유랭크 정보
   const [gameData, setGameData] = useState([]) //최근 전적
   const [activeData, setActiveData] = useState([]) //인게임 정보
+  const [searchHistory, setSearchHistory] = useState([]); //검색기록 리스트
+  const [isSearchHistoryVisible, setSearchHistoryVisible] = useState(false); //검색기록 화면 여부
 
+  
+  const saveSearchHistory = async (searchTerm) => {
+    const searchHistory = await AsyncStorage.getItem('searchHistory');
+    let history = [];
 
+    if (searchHistory) {
+      history = JSON.parse(searchHistory);
+    }
+
+    // 중복 검색어 제거를 위한 처리
+    history = history.filter(item => item.name !== searchTerm.name);
+
+    // 최대 10개의 검색 기록 유지
+    if (history.length >= 10) {
+      history.pop();
+    }
+
+    history.unshift(searchTerm);
+
+    await AsyncStorage.setItem('searchHistory', JSON.stringify(history));
+  } // 검색기록 저장
+  const getSearchHistory = async () => {
+    const searchHistory = await AsyncStorage.getItem('searchHistory');
+    return searchHistory ? JSON.parse(searchHistory) : [];
+  } // 검색기록 불러오기
+  const openSearchHistory = () => {
+    if(!isSearchHistoryVisible){loadSearchHistory()}
+    setSearchHistoryVisible(!isSearchHistoryVisible)
+  } // 검색기록 창 열고닫기 ('검색기록' 버튼 전용)
+  const closeSearchHistory = () => {
+    setSearchHistoryVisible(false)
+    Keyboard.dismiss()
+  } // 검색기록 창 닫기 (검색기록 창 내의 X 버튼 전용)
+  const loadSearchHistory = async () => {
+    const history = await getSearchHistory();
+    setSearchHistory(history);
+  }; // 검색기록 불러와서 searchHistory에 넣기
+  const removeValueFromSearchHistory = async (valueToRemove) => {
+    const searchHistory = await AsyncStorage.getItem('searchHistory');
+    if (searchHistory) {
+      const updatedHistory = JSON.parse(searchHistory).filter(item => item.name !== valueToRemove.name);
+      await AsyncStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+      setSearchHistory(updatedHistory)
+    }
+  } // 검색기록 하나씩 지우기
+  const clearAsyncStorage = async () => {
+      await AsyncStorage.clear();
+      setSearchHistoryVisible(false)
+  } // 검색기록 초기화
+  
   const reset = () => {
     setOk("")
     setSummonerData(null)
@@ -59,6 +113,8 @@ export default function App() {
       setFlexData(null)
       setGameData([])
       setActiveData([])
+      saveSearchHistory(json)
+      setSearchHistoryVisible(false)
       const response1 = await fetch(`https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${json.id}?api_key=${API_KEY}`)
       const json1 = await response1.json()
       const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=30&api_key=${API_KEY}`)
@@ -91,9 +147,11 @@ export default function App() {
     setText1(value)
   } // 글자 입력시마다 text에 반영 (api)
   const handleButtonPress = async (dataFromMatches) => {
+    setSearchHistoryVisible(false)
+    console.log(dataFromMatches)
     await searchFunction(dataFromMatches)
   } // Matches.js에서 선택 검색 시 해당 데이터로 searchFunction 실행
-
+  
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback style={styles.logo} onPress={reset}>
@@ -107,11 +165,47 @@ export default function App() {
           onChangeText={onChangeText}
           value={text}
           placeholder='소환사명을 입력하세요.'
-          returnKeyType="search" />
+          returnKeyType="search"
+          />
         <TouchableOpacity style={styles.searchButton} onPress={sendSummonerName}>
           <Text>검색</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={{flexDirection: "row"}}>
+        <TouchableOpacity style={{marginTop: 10, borderRightWidth: 1, paddingHorizontal: 71}} onPress={openSearchHistory}><Text style={{color: "#424242", fontWeight: 600}}>검색기록</Text></TouchableOpacity>
+        <TouchableOpacity style={{marginHorizontal: 70, marginTop: 10}} onPress={clearAsyncStorage}><Text style={{color: "#424242", fontWeight: 600}}>즐겨찾기</Text></TouchableOpacity>
+      </View>
+
+      {isSearchHistoryVisible && (
+       <View>
+          <View style={{flexDirection: 'row', justifyContent: "space-between", marginVertical: 20}}>
+          <TouchableOpacity onPress={clearAsyncStorage}><Text style={{color: "#424242", fontWeight: 600}}>검색 기록 삭제</Text></TouchableOpacity>
+          <TouchableOpacity onPress={closeSearchHistory}><Feather name="x" size={20} color="gray" /></TouchableOpacity>
+        </View>
+        <FlatList
+          data={searchHistory}
+          style={{maxHeight: 100, width: 300 }}
+          ItemSeparatorComponent={() => <View style={{backgroundColor: '#e0e0e0', height: 1}} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleButtonPress(item.name)} style={{width: 290, padding: 5, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+              <View style={{flexDirection: "row", alignItems: "center"}}>
+                <Image
+                    source={{ uri: `https://z.fow.kr/profile/${item.profileIconId}.png` }}
+                    style={{ width: 30, height: 30, marginRight: 5 }} />
+                <Text style={{color: "#424242", fontWeight: 600}}>{item.name}</Text>
+                </View>
+                <TouchableOpacity onPress={() => removeValueFromSearchHistory(item)}><AntDesign name="close" size={24} color="black" /></TouchableOpacity>
+              
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+        
+        </View>
+        
+        
+      )}
       {summonerData !== null && !summonerData.hasOwnProperty("status") ? // summonerData가 제대로 있는 경우
         (<ScrollView style={styles.datas}>
           <Profile summonerData={summonerData} />
