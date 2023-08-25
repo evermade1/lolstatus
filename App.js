@@ -9,10 +9,11 @@ import Rank from './Rank'
 import Active from './Active';
 import Matches from './Matches';
 import styles from './styles'
+import SearchHistory from './SearchHistory';
 
 
 export default function App() {
-  const [API_KEY, setAPI_KEY] = useState("RGAPI-b4435c60-e79f-4759-9be7-cea1128d05f1")
+  const [API_KEY, setAPI_KEY] = useState("RGAPI-c7137c95-74be-49c0-9340-c9815f791e45")
   const [api, setApi] = useState(null) //api 입력 화면 여부
   const [ok, setOk] = useState("") //초기상태 여부
   const [text, setText] = useState("") //소환사명 입력값
@@ -22,6 +23,7 @@ export default function App() {
   const [flexData, setFlexData] = useState(null) //자유랭크 정보
   const [gameData, setGameData] = useState([]) //최근 전적
   const [activeData, setActiveData] = useState([]) //인게임 정보
+
   const [searchHistory, setSearchHistory] = useState([]); //검색기록 리스트
   const [isSearchHistoryVisible, setSearchHistoryVisible] = useState(false); //검색기록 화면 여부
 
@@ -29,21 +31,16 @@ export default function App() {
   const saveSearchHistory = async (searchTerm) => {
     const searchHistory = await AsyncStorage.getItem('searchHistory');
     let history = [];
-
     if (searchHistory) {
       history = JSON.parse(searchHistory);
     }
-
     // 중복 검색어 제거를 위한 처리
     history = history.filter(item => item.name !== searchTerm.name);
-
     // 최대 10개의 검색 기록 유지
     if (history.length >= 10) {
       history.pop();
     }
-
     history.unshift(searchTerm);
-
     await AsyncStorage.setItem('searchHistory', JSON.stringify(history));
   } // 검색기록 저장
   const getSearchHistory = async () => {
@@ -70,7 +67,7 @@ export default function App() {
       setSearchHistory(updatedHistory)
     }
   } // 검색기록 하나씩 지우기
-  const clearAsyncStorage = async () => {
+  const clearSearchStorage = async () => {
       await AsyncStorage.clear();
       setSearchHistoryVisible(false)
   } // 검색기록 초기화
@@ -174,34 +171,16 @@ export default function App() {
 
       <View style={{flexDirection: "row"}}>
         <TouchableOpacity style={{marginTop: 10, borderRightWidth: 1, paddingHorizontal: 71}} onPress={openSearchHistory}><Text style={{color: "#424242", fontWeight: 600}}>검색기록</Text></TouchableOpacity>
-        <TouchableOpacity style={{marginHorizontal: 70, marginTop: 10}} onPress={clearAsyncStorage}><Text style={{color: "#424242", fontWeight: 600}}>즐겨찾기</Text></TouchableOpacity>
+        <TouchableOpacity style={{marginHorizontal: 70, marginTop: 10}} onPress={clearSearchStorage}><Text style={{color: "#424242", fontWeight: 600}}>즐겨찾기</Text></TouchableOpacity>
       </View>
 
       {isSearchHistoryVisible && (
        <View>
           <View style={{flexDirection: 'row', justifyContent: "space-between", marginVertical: 20}}>
-          <TouchableOpacity onPress={clearAsyncStorage}><Text style={{color: "#424242", fontWeight: 600}}>검색 기록 삭제</Text></TouchableOpacity>
+          <TouchableOpacity onPress={clearSearchStorage}><Text style={{color: "#424242", fontWeight: 600}}>검색 기록 삭제</Text></TouchableOpacity>
           <TouchableOpacity onPress={closeSearchHistory}><Feather name="x" size={20} color="gray" /></TouchableOpacity>
         </View>
-        <FlatList
-          data={searchHistory}
-          style={{maxHeight: 100, width: 300 }}
-          ItemSeparatorComponent={() => <View style={{backgroundColor: '#e0e0e0', height: 1}} />}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleButtonPress(item.name)} style={{width: 290, padding: 5, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-              <View style={{flexDirection: "row", alignItems: "center"}}>
-                <Image
-                    source={{ uri: `https://z.fow.kr/profile/${item.profileIconId}.png` }}
-                    style={{ width: 30, height: 30, marginRight: 5 }} />
-                <Text style={{color: "#424242", fontWeight: 600}}>{item.name}</Text>
-                </View>
-                <TouchableOpacity onPress={() => removeValueFromSearchHistory(item)}><AntDesign name="close" size={24} color="black" /></TouchableOpacity>
-              
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        
+        <SearchHistory searchHistory={searchHistory} handleButtonPress={handleButtonPress} removeValueFromSearchHistory={removeValueFromSearchHistory} />
         </View>
         
         
