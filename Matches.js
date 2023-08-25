@@ -122,13 +122,13 @@ const Matches = ({ gameData, id, onButtonPress}) => {
                   <View style={{ flexDirection: "column", marginLeft: 5, width: 75 }}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                       <Text style={{fontSize: 13, fontWeight: 600, color: "#424242"}}>
-                        <Text>{myData.kills} /</Text>
-                        <Text> {myData.deaths} /</Text>
+                        <Text style={myData.kills > 20 ? {color: "#424242", textShadowColor: 'red', textShadowRadius: myData.kills/10} : null }>{myData.kills} </Text>
+                        <Text>/ {myData.deaths} /</Text>
                         <Text> {myData.assists}</Text>
                       </Text>
                     </View>
                     <Text style={{ marginTop: 4, fontSize: 12, color: "#424242", fontWeight: 600 }}>{QUEUETYPE[gameData.queueId]}</Text>
-                    <Text style={{ marginTop: 4, fontSize: 12, color: myData.gameEndedInEarlySurrender ? "#424242" : (myData.win ? "#0080FF" : "#FF4000"), fontWeight: 600 }}>{myData.gameEndedInEarlySurrender ? "다시하기" : (myData.win ? "승리" : "패배")}</Text>
+                    <Text style={{ marginTop: 4, fontSize: 12, color: myData.gameEndedInEarlySurrender ? "#424242" : (myData.win ? "#0174DF" : "#FE2E2E"), fontWeight: 600 }}>{myData.gameEndedInEarlySurrender ? "다시하기" : (myData.win ? "승리" : "패배")}</Text>
                   </View>
                   <View>
                     <View style={{ flexDirection: "row", marginLeft: 4 }}>

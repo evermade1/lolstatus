@@ -8,17 +8,17 @@ const SearchHistory = ({ searchHistory, handleButtonPress, removeValueFromSearch
     return (
         <FlatList
           data={searchHistory}
-          style={{maxHeight: 100, width: 300 }}
+          style={{maxHeight: 125, width: 330, backgroundColor: "white"}}
           ItemSeparatorComponent={() => <View style={{backgroundColor: '#e0e0e0', height: 1}} />}
           renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleButtonPress(item.name)} style={{ width: 290, padding: 5, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+              <TouchableOpacity onPress={() => handleButtonPress(item.name)} style={{ width: 320, padding: 5, height: 50, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                       <Image
                           source={{ uri: `https://z.fow.kr/profile/${item.profileIconId}.png` }}
-                          style={{ width: 30, height: 30, marginRight: 5 }} />
-                      <Text style={{ color: "#424242", fontWeight: 600 }}>{item.name}</Text>
+                          style={{ width: 30, height: 30, marginRight: 10, borderRadius: 5 }} />
+                      <Text style={{ color: "#424242", fontSize: 12, fontWeight: 600 }}>{item.name}</Text>
                   </View>
-                  <TouchableOpacity onPress={() => removeValueFromSearchHistory(item)}><AntDesign name="close" size={24} color="black" /></TouchableOpacity>
+                  <TouchableOpacity onPress={() => removeValueFromSearchHistory(item)}><AntDesign name="close" size={18} color="#424242" /></TouchableOpacity>
 
               </TouchableOpacity>
           )}

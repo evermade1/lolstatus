@@ -48,6 +48,7 @@ export default function App() {
     return searchHistory ? JSON.parse(searchHistory) : [];
   } // 검색기록 불러오기
   const openSearchHistory = () => {
+    Keyboard.dismiss()
     if(!isSearchHistoryVisible){loadSearchHistory()}
     setSearchHistoryVisible(!isSearchHistoryVisible)
   } // 검색기록 창 열고닫기 ('검색기록' 버튼 전용)
@@ -175,12 +176,12 @@ export default function App() {
       </View>
 
       {isSearchHistoryVisible && (
-       <View>
-          <View style={{flexDirection: 'row', justifyContent: "space-between", marginVertical: 20}}>
-          <TouchableOpacity onPress={clearSearchStorage}><Text style={{color: "#424242", fontWeight: 600}}>검색 기록 삭제</Text></TouchableOpacity>
-          <TouchableOpacity onPress={closeSearchHistory}><Feather name="x" size={20} color="gray" /></TouchableOpacity>
-        </View>
+       <View style={{backgroundColor: "white", padding: 10, margin: 10}}>
         <SearchHistory searchHistory={searchHistory} handleButtonPress={handleButtonPress} removeValueFromSearchHistory={removeValueFromSearchHistory} />
+        <View style={{flexDirection: 'row', justifyContent: "space-between", marginTop: 10 }}>
+            <TouchableOpacity onPress={clearSearchStorage}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginLeft: 10}}>검색 기록 삭제</Text></TouchableOpacity>
+            <TouchableOpacity onPress={closeSearchHistory}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginRight: 10}}>닫기</Text></TouchableOpacity>
+          </View>
         </View>
         
         
