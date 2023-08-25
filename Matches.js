@@ -81,6 +81,30 @@ const Matches = ({ gameData, id, onButtonPress}) => {
   
       {gameData.map((gameData, index) => {
         const time = new Date(gameData.gameEndTimestamp).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul', month: 'long', day: 'numeric' }) //Date 형태의 시간을 변환
+        const timeDifference = Date.now() - gameData.gameEndTimestamp;
+        const seconds = Math.floor(timeDifference / 1000);
+        let timeAfter = null
+        if (seconds < 60) {
+          timeAfter = `${seconds}초 전`;
+        } else {
+          // 초를 분과 초로 변환
+          const minutes = Math.floor(seconds / 60);
+
+          if (minutes < 60) {
+            timeAfter =`${minutes}분 전`;
+          } else {
+            // 분을 시간과 분으로 변환
+            const hours = Math.floor(minutes / 60);
+
+            
+            if (hours < 24) {
+              timeAfter =`${hours}시간 전`;
+            } else {
+              const days = Math.floor(hours / 24)
+              timeAfter =`${days}일 전`;
+            }
+          }
+        }
         const myData = gameData.participants.filter((value) => value.summonerId == id)[0] //전체 데이터에서 내 데이터만 추출
         if (!myData) { return } //내 데이터가 없으면 실행x
         if (k && gameData.queueId !== k) { return } //유저가 원하는 게임 종류만 출력
@@ -144,8 +168,10 @@ const Matches = ({ gameData, id, onButtonPress}) => {
                   </View>
                 </View>
                 <View>
-                  <Text style={{fontSize: 12, fontWeight: 500, color: "#424242"}}> {time}</Text>
-                  <Text style={{marginTop: 2, fontSize: 10, fontWeight: 500, color: "#424242"}}> {Math.floor(gameData.gameDuration/60)}분 {gameData.gameDuration%60}초</Text>
+                  <Text style={{fontSize: 12, fontWeight: 500, color: "#424242", textAlign: 'right'}}> {time}</Text>
+                  <Text style={{marginTop: 2, fontSize: 10, fontWeight: 500, color: "#424242", textAlign: 'right'}}> {Math.floor(gameData.gameDuration/60)}분 {gameData.gameDuration%60}초</Text>
+                  <Text style={{marginTop: 2, fontSize: 9, fontWeight: 500, color: "#424242", textAlign: 'right'}}> {timeAfter}</Text>
+                  
                 </View>
               </LinearGradient>
             </TouchableOpacity>

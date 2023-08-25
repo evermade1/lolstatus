@@ -3,6 +3,7 @@ export const famous = {
     "그어살": "Dplus KIA [Canyon]",
     "deft dk": "Dplus KIA [Deft]",
     "건물 사이 장미": "Dplus KIA [ShowMaker]",
+    "칸 나" : "Dplus KIA [Canna]",
     "hide on bush": "T1 [Faker]",
     "pnpm": "Famous Player [Dopa]",
     "괴물쥐": "Famous Player [Monsrat]",
