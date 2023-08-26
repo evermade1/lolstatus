@@ -4,16 +4,18 @@ import { Text, View, TextInput, Image, TouchableOpacity, Keyboard, ScrollView, T
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 import Profile from './Profile'
 import Rank from './Rank'
 import Active from './Active';
 import Matches from './Matches';
-import styles from './styles'
+import styles from './styles';
 import SearchHistory from './SearchHistory';
+import Fav from './Fav';
 
 
 export default function App() {
-  const [API_KEY, setAPI_KEY] = useState("RGAPI-c7137c95-74be-49c0-9340-c9815f791e45")
+  const [API_KEY, setAPI_KEY] = useState("RGAPI-a5563d54-2b7b-4ffc-b063-9b789f6135a0")
   const [api, setApi] = useState(null) //api 입력 화면 여부
   const [ok, setOk] = useState("") //초기상태 여부
   const [text, setText] = useState("") //소환사명 입력값
@@ -26,6 +28,13 @@ export default function App() {
 
   const [searchHistory, setSearchHistory] = useState([]); //검색기록 리스트
   const [isSearchHistoryVisible, setSearchHistoryVisible] = useState(false); //검색기록 화면 여부
+
+  const [fav, setFav] = useState([]); //즐겨찾기 리스트
+  const [isFavVisible, setFavVisible] = useState(false); //즐겨찾기 화면 여부
+  const [nowFav, setNowFav] = useState(false)
+
+  const [my, setMy] = useState([]); //즐겨찾기 리스트
+
 
   
   const saveSearchHistory = async (searchTerm) => {
@@ -51,6 +60,7 @@ export default function App() {
     Keyboard.dismiss()
     if(!isSearchHistoryVisible){loadSearchHistory()}
     setSearchHistoryVisible(!isSearchHistoryVisible)
+    setFavVisible(false)
   } // 검색기록 창 열고닫기 ('검색기록' 버튼 전용)
   const closeSearchHistory = () => {
     setSearchHistoryVisible(false)
@@ -69,17 +79,110 @@ export default function App() {
     }
   } // 검색기록 하나씩 지우기
   const clearSearchStorage = async () => {
-      await AsyncStorage.clear();
-      setSearchHistoryVisible(false)
-  } // 검색기록 초기화
+    setSearchHistoryVisible(false)
+    const keys = await AsyncStorage.getAllKeys(); // 모든 키를 가져옵니다.
+    const keysToDelete = keys.filter(key => key.startsWith('searchHistory'));
+    await AsyncStorage.multiRemove(keysToDelete);
+  };
+
+
+  const saveFav = async (searchTerm) => {
+    const fav = await AsyncStorage.getItem('fav');
+    let favorite = [];
+    if (fav) {
+      favorite = JSON.parse(fav);
+    }
+    // 중복 검색어 제거를 위한 처리
+    favorite = favorite.filter(item => item.name !== searchTerm.name);
+    // // 최대 10개의 검색 기록 유지
+    // if (favorite.length >= 10) {
+    //   favorite.pop();
+    // }
+    favorite.unshift(searchTerm);
+    await AsyncStorage.setItem('fav', JSON.stringify(favorite));
+    setFav(favorite)
+  } // 검색기록 저장
+  const getFav = async () => {
+    const fav = await AsyncStorage.getItem('fav');
+    return fav ? JSON.parse(fav) : [];
+  } // 검색기록 불러오기
+  const openFav = () => {
+    Keyboard.dismiss()
+    if(!isFavVisible){loadFav()}
+    setFavVisible(!isFavVisible)
+    setSearchHistoryVisible(false)
+  } // 검색기록 창 열고닫기 ('검색기록' 버튼 전용)
+  const closeFav = () => {
+    setFavVisible(false)
+    Keyboard.dismiss()
+  } // 검색기록 창 닫기 (검색기록 창 내의 X 버튼 전용)
+  const loadFav = async () => {
+    const favorite = await getFav();
+    setFav(favorite);
+  }; // 검색기록 불러와서 Fav에 넣기
+  const removeValueFromFav = async (valueToRemove) => {
+    const fav = await AsyncStorage.getItem('fav');
+    if (fav) {
+      const updatedFav = JSON.parse(fav).filter(item => item.name !== valueToRemove.name);
+      await AsyncStorage.setItem('fav', JSON.stringify(updatedFav));
+      setFav(updatedFav)
+    }
+  } // 검색기록 하나씩 지우기
+  const clearFavStorage = async () => {
+    setFavVisible(false)
+    const keys = await AsyncStorage.getAllKeys(); // 모든 키를 가져옵니다.
+    const keysToDelete = keys.filter(key => key.startsWith('fav'));
+    await AsyncStorage.multiRemove(keysToDelete);
+  };
+
+  const saveMy = async (searchTerm) => {
+    const my = await AsyncStorage.getItem('my');
+    let mine = [];
+    if (my) {
+      mine = JSON.parse(my);
+    }
+    mine.unshift(searchTerm);
+    if (mine.length > 1) {
+      mine.pop();
+    }
+    await AsyncStorage.setItem('my', JSON.stringify(mine));
+  } // 검색기록 저장
+  const getMy = async () => {
+    const my = await AsyncStorage.getItem('my');
+    return my ? JSON.parse(my) : [];
+  } // 검색기록 불러오기
+  const loadMy = async () => {
+    const my = await getMy();
+    if (my.length == 0) {
+        Alert.alert(
+          "저장된 내 데이터가 없습니다.",
+          "내 데이터를 저장해 보세요.",
+          [{
+            text: "확인",
+            style: "default"
+          }]
+        );
+    } else {searchFunction(my[0].name)}
+  }; // 검색기록 불러와서 Fav에 넣기
+  const removeValueFromMy = async (valueToRemove) => {
+    const my = await AsyncStorage.getItem('my');
+    if (my) {
+      const updatedMy = JSON.parse(my).filter(item => item.name !== valueToRemove.name);
+      await AsyncStorage.setItem('my', JSON.stringify(updatedMy));
+      setMy(updatedMy)
+    }
+  } // 검색기록 하나씩 지우기
   
   const reset = () => {
+    Keyboard.dismiss()
     setOk("")
     setSummonerData(null)
     setRankData(null)
     setFlexData(null)
     setGameData([])
     setActiveData([])
+    setSearchHistoryVisible(false)
+    setFavVisible(false)
   } // 데이터 리셋 함수
   const apiVisible = () => {
     api ? setApi(null) : setApi("1")
@@ -112,7 +215,10 @@ export default function App() {
       setGameData([])
       setActiveData([])
       saveSearchHistory(json)
+      // saveFav(json)
       setSearchHistoryVisible(false)
+      setFavVisible(false)
+      setNowFav(false)
       const response1 = await fetch(`https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${json.id}?api_key=${API_KEY}`)
       const json1 = await response1.json()
       const response2 = await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${json.puuid}/ids?start=0&count=30&api_key=${API_KEY}`)
@@ -131,6 +237,7 @@ export default function App() {
       setRankData(solo[0])
       const flex = json1.filter(obj => obj.queueType === "RANKED_FLEX_SR")
       setFlexData(flex[0])
+
     }
   } // 검색하는 함수
   const sendSummonerName = async () => {
@@ -146,7 +253,6 @@ export default function App() {
   } // 글자 입력시마다 text에 반영 (api)
   const handleButtonPress = async (dataFromMatches) => {
     setSearchHistoryVisible(false)
-    console.log(dataFromMatches)
     await searchFunction(dataFromMatches)
   } // Matches.js에서 선택 검색 시 해당 데이터로 searchFunction 실행
   
@@ -170,17 +276,29 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
-      <View style={{flexDirection: "row"}}>
-        <TouchableOpacity style={{marginTop: 10, borderRightWidth: 1, paddingHorizontal: 71}} onPress={openSearchHistory}><Text style={{color: "#424242", fontWeight: 600}}>검색기록</Text></TouchableOpacity>
-        <TouchableOpacity style={{marginHorizontal: 70, marginTop: 10}} onPress={clearSearchStorage}><Text style={{color: "#424242", fontWeight: 600}}>즐겨찾기</Text></TouchableOpacity>
+      <View style={{flexDirection: "row", justifyContent: "flex-start"}}>
+        <TouchableOpacity style={{marginTop: 10, marginHorizontal: 80}} onPress={openSearchHistory}><Octicons name="history" size={20} color="#424242" /></TouchableOpacity>
+        <TouchableOpacity style={{marginTop: 10}} onPress={loadMy}><Octicons name="person" size={20} color="#424242" /></TouchableOpacity>
+        <TouchableOpacity style={{marginHorizontal: 80, marginTop: 10}} onPress={openFav}><Octicons  name="star" size={20} color="#424242" /></TouchableOpacity>
       </View>
 
       {isSearchHistoryVisible && (
        <View style={{backgroundColor: "white", padding: 10, margin: 10}}>
         <SearchHistory searchHistory={searchHistory} handleButtonPress={handleButtonPress} removeValueFromSearchHistory={removeValueFromSearchHistory} />
         <View style={{flexDirection: 'row', justifyContent: "space-between", marginTop: 10 }}>
-            <TouchableOpacity onPress={clearSearchStorage}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginLeft: 10}}>검색 기록 삭제</Text></TouchableOpacity>
+            <TouchableOpacity onPress={clearSearchStorage}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginLeft: 10}}>검색기록 전체 삭제</Text></TouchableOpacity>
             <TouchableOpacity onPress={closeSearchHistory}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginRight: 10}}>닫기</Text></TouchableOpacity>
+          </View>
+        </View>
+        
+        
+      )}
+      {isFavVisible && (
+       <View style={{backgroundColor: "white", padding: 10, margin: 10}}>
+        <Fav fav={fav} handleButtonPress={handleButtonPress} removeValueFromFav={removeValueFromFav} />
+        <View style={{flexDirection: 'row', justifyContent: "space-between", marginTop: 10 }}>
+            <TouchableOpacity onPress={clearFavStorage}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginLeft: 10}}>즐겨찾기 전체 삭제</Text></TouchableOpacity>
+            <TouchableOpacity onPress={closeFav}><Text style={{color: "#585858", fontSize: 12, fontWeight: 600, marginRight: 10}}>닫기</Text></TouchableOpacity>
           </View>
         </View>
         
@@ -188,7 +306,7 @@ export default function App() {
       )}
       {summonerData !== null && !summonerData.hasOwnProperty("status") ? // summonerData가 제대로 있는 경우
         (<ScrollView style={styles.datas}>
-          <Profile summonerData={summonerData} />
+          <Profile summonerData={summonerData} saveFav={saveFav} removeValueFromFav={removeValueFromFav} saveMy={saveMy} removeValueFromMy={removeValueFromMy} />
           <Rank rankData={rankData} flexData={flexData} />
           <Active activeData={activeData} />
           <Matches gameData={gameData} id={summonerData.id} onButtonPress={handleButtonPress} />

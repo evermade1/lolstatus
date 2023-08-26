@@ -13,7 +13,7 @@ const Badge = ({myData, gameData}) => {
     {myData.challenges && myData.challenges.legendaryCount !== 0 ? <View style={{ ...styles.badge, backgroundColor: "#FA5858"}}><Text style={{...styles.badgeFont, color: "black", textShadowColor: "gray" }}>전설</Text></View> : null}
     {myData.firstBloodKill ? <View style={{ ...styles.badge, backgroundColor: "red"}}><Text style={styles.badgeFont}>퍼블</Text></View> : null}
     {myData.firstTowerKill ? <View style={{ ...styles.badge, backgroundColor: "#5882FA"}}><Text style={styles.badgeFont}>포블</Text></View> : null}
-    {myData.challenges && myData.challenges.soloKills ? <View style={{ ...styles.badge, backgroundColor: "#8904B1"}}><Text style={styles.badgeFont}>솔킬{myData.challenges.soloKills}회</Text></View> : null}
+    {myData.challenges && myData.challenges.soloKills ? <View style={{ ...styles.badge, backgroundColor: "#424242"}}><Text style={styles.badgeFont}>솔킬{myData.challenges.soloKills}회</Text></View> : null}
     {gameData.participants.slice().sort((a, b) => b.totalDamageDealtToChampions - a.totalDamageDealtToChampions)[0].totalDamageDealtToChampions === myData.totalDamageDealtToChampions ? <View style={{ ...styles.badge, backgroundColor: "red"}}><Text style={styles.badgeFont}>딜신</Text></View> : null}
     {gameData.participants.slice().sort((a, b) => b.goldEarned - a.goldEarned)[0].goldEarned === myData.goldEarned ? <View style={{ ...styles.badge, backgroundColor: "#FFBF00"}}><Text style={styles.badgeFont}>갑부</Text></View> : null}
     {gameData.participants.slice().sort((a, b) => b.kills - a.kills)[0].kills === myData.kills ? <View style={{...styles.badge, backgroundColor: "lightgray"}}><Text style={{...styles.badgeFont, color: "red", textShadowColor: "red"}}>학살자</Text></View> : null}

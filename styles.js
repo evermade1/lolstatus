@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     },
     datas: {
       width: "100%",
-      marginTop: 15,
-      paddingTop: 20,
+      marginTop: 10,
+      paddingTop: 0,
       paddingBottom: 100
     },
     typeButtons: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     },
     profile1: {
       flexDirection: "row",
-      justifyContent: 'flex-start',
+      // justifyContent: 'flex-start',
       paddingHorizontal: 30,
       paddingVertical: 20
     },
