@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
       borderRadius: 10,
     },
     searchButton: {
-      backgroundColor: "#00FFBF",
+      //backgroundColor: "#00FFBF",
+      backgroundColor: "#D30000",
       width: "20%",
       borderRadius: 10,
       alignItems: "center",
