@@ -53,6 +53,25 @@ const styles = StyleSheet.create({
       paddingTop: 0,
       paddingBottom: 100
     },
+    activeAndQueueIdButtons: {
+      flexDirection: "row",
+      justifyContent: "center",
+      margin: 10
+    },
+    activeAndQueueIdButton: {
+      // backgroundColor: "lightgray",
+      width: "49%",
+      //height: "10%",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 20
+    },
+    activeAndQueueIdButtonFont: {
+      margin: 3,
+      fontSize: 11,
+      fontWeight: 600,
+      color: "#424242"
+    },
     typeButtons: {
       flexDirection: "row",
       justifyContent: "space-around",

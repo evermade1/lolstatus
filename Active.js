@@ -26,20 +26,10 @@ const Active = ({ activeData }) => {
         2010: 'tut',
         2020: 'tut',
     }
-    const [isVisible, setIsVisible] = useState(false);
-
-  const handleButtonClick = () => {
-    setIsVisible(!isVisible);
-  };
 
     return (
-        <View style={{marginTop: 5}}>
-        <View style={styles.typeButtons}>
-                <TouchableOpacity onPress={handleButtonClick} style={{...styles.typeButton, height: 30}}>
-                    <Text style={styles.buttonsFont}>인게임 정보</Text>
-                </TouchableOpacity>
-                </View>
-        {isVisible && <View style={activeData.participants ? { padding: 10, margin: 10, backgroundColor: "lightgray", alignItems: "center", borderRadius: 10 } : null}>
+        <View>
+        <View style={activeData.participants ? { padding: 10, margin: 10, backgroundColor: "lightgray", alignItems: "center", borderRadius: 10 } : null}>
             {activeData.participants &&
                 <View style={{alignItems: "center"}}>
                     <Text style={{ margin: 3 }}>{QUEUETYPE[activeData.gameQueueConfigId]}</Text>
@@ -158,7 +148,8 @@ const Active = ({ activeData }) => {
                 ))}
             </View>
             </View>
-        </View>}</View>
+        </View>
+        </View>
     )
 }
 

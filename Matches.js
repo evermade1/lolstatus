@@ -1,4 +1,4 @@
-import { Text, View, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, Image, ScrollView, TouchableOpacity, Dimensions, NestedScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import ProgressBar from './Progress';
 import styles from './styles'
@@ -6,7 +6,6 @@ import Badge from './Badge'
 import { useEffect, useState } from 'react';
 
 const Matches = ({ gameData, id, onButtonPress}) => {
-  //const gameDataKeys = Object.keys(gameData);
   const QUEUETYPE = {
     400: '일반', //Normal Draft Pick
     420: '솔로랭크',
@@ -29,8 +28,7 @@ const Matches = ({ gameData, id, onButtonPress}) => {
     2000: 'tut',
     2010: 'tut',
     2020: 'tut',
-  }
-  const [k, setK] = useState(null)
+  } // 게임 종류
   const [selectedButtonIndex, setSelectedButtonIndex] = useState(null); //유저가 클릭한 매치를 저장하는 변수
   const handleInternalButtonPress = (x) => () => {
     setSelectedButtonIndex(null)
@@ -42,30 +40,30 @@ const Matches = ({ gameData, id, onButtonPress}) => {
   const handleButtonClick = (index) => {
     setSelectedButtonIndex(index === selectedButtonIndex ? null : index);
   }; //유저가 클릭한 매치 디테일 여는 함수
-  
 
   gameData.sort(function (a, b) {
     return b.gameCreation - a.gameCreation;
   }); //시간 순서로 정렬
   return (
     <View style={{ paddingHorizontal: 20, marginBottom: 50 }}>
-      <View style={styles.typeButtons}>
-        <TouchableOpacity onPress={() => setK(null)} style={styles.typeButton}>
+
+      {/* <View style={styles.typeButtons}>
+        <TouchableOpacity onPress={() => setQueueId(null)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>전체</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setK(420)} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setQueueId(420)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>솔로랭크</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setK(440)} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setQueueId(440)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>자유랭크</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setK(430)} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setQueueId(430)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>일반</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setK(450)} style={styles.typeButton}>
+        <TouchableOpacity onPress={() => setQueueId(450)} style={styles.typeButton}>
           <Text style={styles.buttonsFont}>무작위 총력전</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       {/* <TouchableOpacity onPress={handlePickerClick} style={{...styles.typeButton, height: 30}}>
                     <Text style={styles.buttonsFont}>게임 종류</Text>
                 </TouchableOpacity>
@@ -107,7 +105,7 @@ const Matches = ({ gameData, id, onButtonPress}) => {
         }
         const myData = gameData.participants.filter((value) => value.summonerId == id)[0] //전체 데이터에서 내 데이터만 추출
         if (!myData) { return } //내 데이터가 없으면 실행x
-        if (k && gameData.queueId !== k) { return } //유저가 원하는 게임 종류만 출력
+        // if (queueId && gameData.queueId !== queueId) { return } //유저가 원하는 게임 종류만 출력
         // if (myData.length >= 20) {
         //     myData.splice(20);
         //   }

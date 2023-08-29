@@ -13,7 +13,7 @@ import Fav from './Fav';
 
 
 export default function App() {
-  const [API_KEY, setAPI_KEY] = useState("RGAPI-160492d7-fc96-40a8-bb11-9088ef15aa52")
+  const [API_KEY, setAPI_KEY] = useState("RGAPI-44234749-3a20-4c65-b05d-f9d96135a000")
   const [api, setApi] = useState(null) // api 입력 화면 여부
   const [ok, setOk] = useState("") // 홈 화면 여부
   const [text, setText] = useState("") // 소환사명 입력값
@@ -29,7 +29,27 @@ export default function App() {
 
   const [fav, setFav] = useState([]); // 즐겨찾기 리스트
   const [isFavVisible, setFavVisible] = useState(false); // 즐겨찾기 화면 여부
+  
+  const [isActiveVisible, setActiveVisible] = useState(false); // 인게임 정보 화면 여부
+  const [isQueueListVisible, setQueueListVisible] = useState(false) // 게임 모드 화면 여부
 
+  const data = [
+    { id: null, name: '전체' },
+    { id: 420, name: '솔로랭크' },
+    { id: 440, name: '자유랭크' },
+    { id: 430, name: '일반' },
+    { id: 450, name: '무작위 총력전' },
+    // ... 더 많은 아이템 데이터
+  ];
+
+  const handleActiveButtonClick = () => {
+    setActiveVisible(!isActiveVisible);
+  };
+
+  const gameModeButtonClick = () => {
+    setQueueListVisible(!isQueueListVisible)
+  }
+  
   const saveSearchHistory = async (searchTerm) => {
     const searchHistory = await AsyncStorage.getItem('searchHistory');
     let history = [];
@@ -189,6 +209,8 @@ export default function App() {
       saveSearchHistory(profile)
       setSearchHistoryVisible(false)
       setFavVisible(false)
+      setActiveVisible(false)
+      setQueueListVisible(false)
       // 랭크 데이터
       const rank = await (await fetch(`https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/${profile.id}?api_key=${API_KEY}`)).json()
       // 솔로랭크 데이터
@@ -226,7 +248,29 @@ export default function App() {
     setSearchHistoryVisible(false)
     await searchFunction(dataFromMatches)
   } // 클릭 검색 시 해당 데이터로 searchFunction 실행
+  const matchfunction = async (queueId) => {
+    setQueueListVisible(false)
+    setGameData([])
+    if (queueId !== null) {
+      const matches = await (await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${summonerData.puuid}/ids?queue=${queueId}&start=0&count=30&api_key=${API_KEY}`)).json()
+      matches.map(async (m) => {
+        const match = await (await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/${m}?api_key=${API_KEY}`)).json();
+        if (match.info) {
+          setGameData((prevGameData) => [...prevGameData, match.info]);
+        }
+      });
+    } // 특정 게임 모드
+    else {
+      const matches = await (await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/${summonerData.puuid}/ids?start=0&count=30&api_key=${API_KEY}`)).json()
+      matches.map(async (m) => {
+        const match = await (await fetch(`https://asia.api.riotgames.com/lol/match/v5/matches/${m}?api_key=${API_KEY}`)).json();
+        if (match.info) {
+          setGameData((prevGameData) => [...prevGameData, match.info]);
+        }
+      });
+    } // 매치 전체
 
+  }
   return (
     <View style={styles.container}>
 
@@ -290,7 +334,30 @@ export default function App() {
         (<ScrollView style={styles.datas}>
           <Profile summonerData={summonerData} saveFav={saveFav} removeValueFromFav={removeValueFromFav} saveMy={saveMy} removeValueFromMy={removeValueFromMy} />
           <Rank rankData={rankData} flexData={flexData} />
-          <Active activeData={activeData} />
+          <View style={styles.activeAndQueueIdButtons}>
+            <TouchableOpacity onPress={handleActiveButtonClick} style={{ ...styles.activeAndQueueIdButton}}>
+              <Text style={styles.activeAndQueueIdButtonFont}>인게임 정보</Text>
+            </TouchableOpacity>
+            <View style={{borderRightWidth: 1.5, borderColor: "#424242"}} />
+            <TouchableOpacity onPress={gameModeButtonClick} style={{ ...styles.activeAndQueueIdButton }}>
+              <Text style={styles.activeAndQueueIdButtonFont}>게임 모드</Text>
+            </TouchableOpacity>
+          </View>
+          {isActiveVisible && <Active activeData={activeData} />}
+          {isQueueListVisible && <View>
+        {data.map((item, index) => (
+          <TouchableOpacity
+            key={item.id} // key 추가 (각 요소는 고유한 key를 가져야 함)
+            onPress={() => matchfunction(item.id)}
+            style={{ height: 40, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ color: "#424242", fontSize: 12, fontWeight: "600" }}>
+                {item.name}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>}
           <Matches gameData={gameData} id={summonerData.id} onButtonPress={handleButtonPress} />
         </ScrollView>)
         : // summonerData가 없거나 유효하지 않은 경우

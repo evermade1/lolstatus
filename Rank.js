@@ -36,6 +36,7 @@ const Rank = ({ rankData, flexData }) => {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         horizontal
+        style={{marginBottom: 10}}
         >
             <LinearGradient style={styles.profile2}
             colors={["#ffffff", bgColor[rankData ? rankData.tier.toLowerCase() : 0],"#ffffff"]}
@@ -56,7 +57,7 @@ const Rank = ({ rankData, flexData }) => {
                             source={{ uri: `https://z.fow.kr/img/emblem/unranked.png` }}
                             style={{ width: 100, height: 100, marginTop: 15 }}
                         />
-                        <Text style={{ marginTop: 20, fontSize: 15, fontWeight: 500 }}>언랭</Text>
+                        <Text style={{ marginTop: 20, fontSize: 15, fontWeight: 500 }}>unranked</Text>
                     </View>
                 }
             </LinearGradient>
