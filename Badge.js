@@ -5,7 +5,7 @@ import styles from './styles';
 const Badge = ({myData, gameData}) => {
     return (
         <View style={{ flexDirection: "row", marginLeft: 5, flexWrap: "wrap", width: 135 }}>
-    {myData.challenges && gameData.participants.slice().sort((a, b) => b.challenges.kda - a.challenges.kda)[0].challenges.kda === myData.challenges.kda ? <View style={{ ...styles.badge, backgroundColor: "#5882FA"}}><Text style={{...styles.badgeFont, color: "#FFFF00", textShadowColor: "#FACC2E"}}>MVP</Text></View> : null}
+    {myData.challenges && myData.challenges.kda && gameData.participants.slice().sort((a, b) => b.challenges.kda - a.challenges.kda)[0].challenges.kda === myData.challenges.kda ? <View style={{ ...styles.badge, backgroundColor: "#5882FA"}}><Text style={{...styles.badgeFont, color: "#FFFF00", textShadowColor: "#FACC2E"}}>MVP</Text></View> : null}
     {myData.doubleKills !== 0 && myData.tripleKills == 0 ? <View style={{ ...styles.badge, backgroundColor: "#FA5858"}}><Text style={styles.badgeFont}>더블킬</Text></View> : null}
     {myData.tripleKills !== 0 && myData.quadraKills == 0 ? <View style={{ ...styles.badge, backgroundColor: "#FE2E2E"}}><Text style={styles.badgeFont}>트리플킬</Text></View> : null}
     {myData.quadraKills !== 0 && myData.pentaKills == 0 ? <View style={{ ...styles.badge, backgroundColor: "#DF0101"}}><Text style={styles.badgeFont}>쿼드라킬</Text></View> : null}

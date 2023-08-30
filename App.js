@@ -33,22 +33,15 @@ export default function App() {
   const [isActiveVisible, setActiveVisible] = useState(false); // 인게임 정보 화면 여부
   const [isQueueListVisible, setQueueListVisible] = useState(false) // 게임 모드 화면 여부
 
-  const data = [
+  const queueIdData = [
     { id: null, name: '전체' },
     { id: 420, name: '솔로랭크' },
     { id: 440, name: '자유랭크' },
     { id: 430, name: '일반' },
     { id: 450, name: '무작위 총력전' },
     // ... 더 많은 아이템 데이터
-  ];
+  ] // 게임 모드
 
-  const handleActiveButtonClick = () => {
-    setActiveVisible(!isActiveVisible);
-  };
-
-  const gameModeButtonClick = () => {
-    setQueueListVisible(!isQueueListVisible)
-  }
   
   const saveSearchHistory = async (searchTerm) => {
     const searchHistory = await AsyncStorage.getItem('searchHistory');
@@ -142,6 +135,7 @@ export default function App() {
     await AsyncStorage.setItem('my', JSON.stringify(mine));
   } // 마이 프로필 저장
   const loadMy = async () => {
+    Keyboard.dismiss()
     const my = await AsyncStorage.getItem('my');
     if (my) {
       const myData = JSON.parse(my);
@@ -166,6 +160,13 @@ export default function App() {
       await AsyncStorage.setItem('my', JSON.stringify(updatedMy));
     }
   } // 마이 프로필 삭제
+
+  const handleActiveButtonClick = () => {
+    setActiveVisible(!isActiveVisible);
+  } // 인게임 정보 버튼 클릭
+  const gameModeButtonClick = () => {
+    setQueueListVisible(!isQueueListVisible)
+  } // 게임 모드 버튼 클릭
 
   const reset = () => {
     Keyboard.dismiss()
@@ -248,7 +249,7 @@ export default function App() {
     setSearchHistoryVisible(false)
     await searchFunction(dataFromMatches)
   } // 클릭 검색 시 해당 데이터로 searchFunction 실행
-  const matchfunction = async (queueId) => {
+  const matchFunctionForQueue = async (queueId) => {
     setQueueListVisible(false)
     setGameData([])
     if (queueId !== null) {
@@ -270,7 +271,8 @@ export default function App() {
       });
     } // 매치 전체
 
-  }
+  } // 특정 게임 모드에 대한 매치 검색 
+
   return (
     <View style={styles.container}>
 
@@ -345,10 +347,10 @@ export default function App() {
           </View>
           {isActiveVisible && <Active activeData={activeData} />}
           {isQueueListVisible && <View>
-        {data.map((item, index) => (
+        {queueIdData.map((item, index) => (
           <TouchableOpacity
             key={item.id} // key 추가 (각 요소는 고유한 key를 가져야 함)
-            onPress={() => matchfunction(item.id)}
+            onPress={() => matchFunctionForQueue(item.id)}
             style={{ height: 40, flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ color: "#424242", fontSize: 12, fontWeight: "600" }}>

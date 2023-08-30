@@ -162,7 +162,7 @@ const Matches = ({ gameData, id, onButtonPress}) => {
                         />
                       ))}
                     </View>
-                    {!myData.gameEndedInEarlySurrender && <Badge myData={myData} gameData={gameData} />}
+                    {!myData.gameEndedInEarlySurrender && gameData.gameMode!=="BOT" && <Badge myData={myData} gameData={gameData} />}
                   </View>
                 </View>
                 <View>
@@ -185,7 +185,7 @@ const Matches = ({ gameData, id, onButtonPress}) => {
                         <View style={{ height: 20, justifyContent: "center", alignItems: "center" }}><Text style={{ fontWeight: 600 }}>Overall</Text></View>
                         {gameData && gameData.participants.map((data, index) =>
                         (
-
+                          
                           <View key={index} style={{ flexDirection: "row", backgroundColor: data.teamId === 100 ? "#CEECF5" : "#F6CECE", height: 51 }}>
                             <View style={{ margin: 5, width: Dimensions.get('window').width - 50 }}>
                               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
