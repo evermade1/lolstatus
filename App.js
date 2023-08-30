@@ -183,7 +183,7 @@ export default function App() {
     api ? setApi(null) : setApi("1")
   } // api 입력 화면 여부
   const sendApiKey = () => {
-    setAPI_KEY(text1)
+    setAPI_KEY(apiText)
   } // 입력한 api_key를 저장하는 함수
   const searchFunction = async (name) => {
     const previousProfile = summonerData
