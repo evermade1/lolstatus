@@ -13,11 +13,9 @@ import Fav from './Fav';
 
 
 export default function App() {
-  const [API_KEY, setAPI_KEY] = useState("RGAPI-44234749-3a20-4c65-b05d-f9d96135a000")
-  const [api, setApi] = useState(null) // api 입력 화면 여부
+  const API_KEY = "RGAPI-6ce4dc81-2d2c-45ff-93d5-2e52f69ce22f"
   const [ok, setOk] = useState("") // 홈 화면 여부
   const [text, setText] = useState("") // 소환사명 입력값
-  const [apiText, setApiText] = useState("") // api 입력값
   const [summonerData, setSummonerData] = useState(null) // 소환사 이름, 레벨 등 정보
   const [rankData, setRankData] = useState(null) // 솔로랭크 정보
   const [flexData, setFlexData] = useState(null) // 자유랭크 정보
@@ -179,12 +177,6 @@ export default function App() {
     setSearchHistoryVisible(false)
     setFavVisible(false)
   } // 데이터 리셋 함수
-  const apiVisible = () => {
-    api ? setApi(null) : setApi("1")
-  } // api 입력 화면 여부
-  const sendApiKey = () => {
-    setAPI_KEY(apiText)
-  } // 입력한 api_key를 저장하는 함수
   const searchFunction = async (name) => {
     const previousProfile = summonerData
     // 기본 프로필
@@ -242,9 +234,6 @@ export default function App() {
   const onChangeText = (name) => {
     setText(name)
   } // 글자 입력시마다 text에 반영
-  const onChangeApi = (value) => {
-    setApiText(value)
-  } // 글자 입력시마다 text에 반영 (api)
   const handleButtonPress = async (dataFromMatches) => {
     setSearchHistoryVisible(false)
     await searchFunction(dataFromMatches)
@@ -365,24 +354,7 @@ export default function App() {
         : // summonerData가 없거나 유효하지 않은 경우
         (ok !== "" ? null // 검색 이후임에도 데이터가 없거나 유효하지 않은 경우 - Alert
           : // 검색하기 전(초기값)이라 데이터가 없는 경우
-          <View style={{ alignItems: "center" }}>
-            {api &&
-              <View style={{ ...styles.topBar, margin: 15, marginLeft: 25 }}>
-                <TextInput style={styles.button}
-                  onSubmitEditing={sendApiKey}
-                  onChangeText={onChangeApi}
-                  value={apiText}
-                  placeholder='API KEY를 입력하세요.' />
-                <TouchableOpacity style={styles.searchButton} onPress={sendApiKey}>
-                  <Text style={{color: "white"}}>완료</Text>
-                </TouchableOpacity>
-              </View>}
-            <TouchableOpacity onPress={apiVisible} style={{ marginTop: 150 }}>
-              <Image
-                source={{ uri: `https://pbs.twimg.com/media/Elq3NXrU8AAK3Xq.jpg` }}
-                style={{ width: 200, height: 210, borderRadius: 15, marginRight: 15 }} />
-            </TouchableOpacity>
-          </View>)}
+          null)}
       <StatusBar style="auto" />
     </View>
   )

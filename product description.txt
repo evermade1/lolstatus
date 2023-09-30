@@ -1,0 +1,9 @@
+(the product name 'lolstatus' is a temporary name. I apologize for my indecision.)
+
+lolstatus is a League of Legends record application developed using 'React Native'. I created it as a personal project for studying purposes as a student. Functionally, there isn't a significant difference compared to other apps. However, when I developed this application, I focused on 'design'. I believe that my distinctive advantage as a developer lies in my sense of aesthetics, and I aimed to create an app that maximizes this advantage.
+
+For example, I designed the app to display as much information about the match as possible at a glance. When scrolling through the match log, you can quickly see how well you performed in a match within seconds.
+
+I am applying for a personal API key for personal use and development purposes.
+
+The APIs we are using are summoner, match, and spectator.
